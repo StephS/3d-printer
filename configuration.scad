@@ -21,6 +21,43 @@ include <metric.scad>
 
 inch = 25.4;
 
+// Select your belt type ******************************************************
+
+//T2.5
+//belt_tooth_distance = 2.5;
+//belt_tooth_ratio = 0.5;
+//belt_tooth_height = 0.7;
+//belt_height = 1.3;
+//belt_base_height = belt_height - belt_tooth_height;
+
+//T5 (strongly discouraged)
+//belt_tooth_distance = 5;
+//belt_tooth_ratio = 0.75;
+
+//HTD3
+//belt_tooth_distance = 3;
+//belt_tooth_ratio = 0.75;
+
+//MXL
+//belt_tooth_distance = 2.032;
+//belt_tooth_ratio = 0.64;
+
+//GT2
+//belt_tooth_distance = 2;
+//belt_tooth_ratio = 0.5;
+//belt_tooth_height = 0.76;
+//belt_height = 1.52;
+//belt_base_height = belt_height - belt_tooth_height;
+
+//GT2-3mm
+belt_tooth_distance = 3;
+belt_tooth_ratio = 0.5;
+belt_tooth_height = 1.14;
+belt_height = 2.41;
+belt_base_height = belt_height - belt_tooth_height;
+belt_width = 6;
+
+
 // Stepper motor dimensions
 stepper_motor_width=42;
 stepper_motor_padded=stepper_motor_width+2;
@@ -78,10 +115,11 @@ LM8UU_length = 24;
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
 LM8UU_height = LM8UU_dia/2+2;
 
-// y_rod_separation=100;
+//y_rod_separation=100;
 y_rod_separation=148;
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+7;
+y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley_belt_center + pulley_height_from_motor);
 
 // test pulley height
 //echo("Y clearance from bed bottom to frame", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
@@ -91,8 +129,10 @@ echo("Y pulley height", pulley_height + pulley_height_from_motor);
 echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
 
 // This is where the center of the belt clamp will be, as compared to the Y platform bottom.
-echo("Y Belt Clamp height", (y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley_belt_center + pulley_height_from_motor));
+echo("Y Belt Clamp height", y_belt_center);
 
+// this setting is for the Prusa i2 bed
+y_belt_clamp_hole_distance=18;
 
 //Bearing version
 // 0 = default lm8uu
