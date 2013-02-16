@@ -62,22 +62,6 @@ module belt_pulley()
 	}
 }
 
-module chamfer(x=10,y=10,z=10) {
- 
- rotate(a=[90,-90,0])
- linear_extrude(height = y, center = true, convexity = 2, twist = 0)
- polygon(points = [
-[-1.00,-1.00]
-,[-1.00,x]
-,[0.00,x]
-,[z,0.00]
-,[z,-1.00]
-]
-,paths = [
-[0,1,2,3,4]]
-       );
-}
-
 wall_height=extrusion_width;
 
 module z_motor_mount() {
@@ -209,9 +193,9 @@ module y_idler_mount() {
 	% translate([0, 0,(pulley_belt_center+pulley_height_from_motor)]) y_idler();
 }
 
-y_idler_mount();
+//y_idler_mount();
 //y_motor_mount();
-//z_motor_mount();
+z_motor_mount();
 //smooth_rod_mount();
 //translate([0, 0, 0]) z_rod_mount();
 

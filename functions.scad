@@ -7,6 +7,20 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
 
+module chamfer(x=10,y=10,z=10) {
+ rotate(a=[90,-90,0])
+ linear_extrude(height = y, center = true, convexity = 2, twist = 0)
+ polygon(points = [
+[-1.00,-1.00]
+,[-1.00,x]
+,[0.00,x]
+,[z,0.00]
+,[z,-1.00]
+]
+,paths = [
+[0,1,2,3,4]]
+       );
+}
 
 module nut(d,h,horizontal=true){
     cornerdiameter =  (d / 2) / cos (180 / 6);
