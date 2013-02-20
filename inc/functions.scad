@@ -55,12 +55,17 @@ module fillet(radius, height=100, $fn=0) {
 
 module cube_fillet(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bottom=[0,0,0,0], center=false, $fn=0){
     //
-    if (center) {
-        cube_fillet_inside(size, radius, vertical, top, bottom, $fn);
-    } else {
-        translate([size[0]/2, size[1]/2, size[2]/2])
+    if (use_fillets) {
+        if (center) {
             cube_fillet_inside(size, radius, vertical, top, bottom, $fn);
+        } else {
+            translate([size[0]/2, size[1]/2, size[2]/2])
+                cube_fillet_inside(size, radius, vertical, top, bottom, $fn);
+        }
+    } else {
+        cube(size, center);
     }
+
 }
 
 module cube_negative_fillet(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bottom=[0,0,0,0], $fn=0){
@@ -97,7 +102,29 @@ module cube_fillet_inside(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bo
     }
 }
 
-module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=true, poly=false, $fn=0){
+
+module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, $fn=24){
+    for (i=[0:3]) {
+        if (places[i] == 1) {
+            rotate([0, 0, 90*i]) translate([size, size, 0]) {
+                if (holes) {
+                    rotate([0, 0, -90*i])  translate([0,0,-10]) screw(r=1.7, slant=false, head_drop=13, $fn=$fn, h=h+12);
+                } else {
+                    rotate([0, 0, -90*i]) cylinder(h=h, r=5.5, $fn=$fn);
+                }
+            }
+        }
+    }
+    if (shadow != false) {
+        %translate ([0, 0, shadow+21+3]) cube([42,42,42], center = true);
+    //flange
+        %translate ([0, 0, shadow+21+3-21-1]) cylinder(r=11,h=2, center = true, $fn=20);
+    //shaft
+        %translate ([0, 0, shadow+21+3-21-7]) cylinder(r=2.5,h=14, center = true);
+    }
+}
+
+module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=i_am_box, poly=false, $fn=0){
     //makes screw with head
     //for substraction as screw hole
     if (poly) {
@@ -114,5 +141,17 @@ module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=true, poly=false, $fn=0){
     }
 }
 
-//cube_fillet([10,20,30], vertical=[3,2,0,0], top=[3,2,0,5], bottom=[3,2,0,5]);
-//cube_fillet([10,20,30], radius=2, top=[7,2,7,2]);
+//radius of the idler assembly (to surface that touches belt, ignoring guide walls)
+function idler_assy_r_inner(idler_bearing) = (idler_bearing[0] / 2) + 4 * single_wall_width * idler_bearing[3];
+//radius of the idler assembly (to smooth side of belt)
+function idler_assy_r_outer(idler_bearing) = (idler_bearing[0] / 2) + (idler_bearing[3] ? (5.5 * idler_bearing[3]) : 3);
+
+
+module idler_assy(idler_bearing = [22, 7, 8, 1], idler_width=x_idler_width) {
+
+    translate([0,0,-1]) cylinder(h = 120, r=idler_bearing[2]/2 + 1, $fn=7, center=true);
+    //bearing shadow
+    %cylinder(h = idler_bearing[1], r=idler_bearing[0]/2, center=true);
+
+    cylinder(h = idler_width + 1, r=idler_assy_r_outer(idler_bearing), center=true);
+}

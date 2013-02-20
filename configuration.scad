@@ -1,7 +1,7 @@
 // PRUSA iteration3
 // Configuration file
 // GNU GPL v3
-// Josef Pr?ša <josefprusa@me.com>
+// Josef Pr?sa <josefprusa@me.com>
 // Václav 'ax' H?la <axtheb@gmail.com>
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
@@ -9,16 +9,15 @@
 // PLEASE SELECT ONE OF THE CONFIGURATIONS BELOW
 // BY UN-COMMENTING IT
 
-// Uncomment for metric settings
-// METRIC METRIC METRIC METRIC METRIC METRIC METRIC METRIC 
-
-
 // functions
-include <functions.scad>
-include <metric.scad>
+include <inc/functions.scad>
+include <inc/metric.scad>;
+include <inc/conf_bushing.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
 
+layer_height = 0.3;
+width_over_thickness = 2.2;
 inch = 25.4;
 
 // Select your belt type ******************************************************
@@ -55,7 +54,7 @@ belt_tooth_ratio = 0.5;
 belt_tooth_height = 1.14;
 belt_height = 2.41;
 belt_base_height = belt_height - belt_tooth_height;
-belt_width = 6;
+belt_width = 7;
 
 
 // Stepper motor dimensions
@@ -109,87 +108,134 @@ pulley_belt_center=(pulley_height-pulley_hub_height)/2+pulley_hub_height;
 // the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
 pulley_height_from_motor=3;
 
+// Choose bearing/bushing configuration ***************************************
+// conf_b_* are in inc/conf_bushing.scad
+
+bushing_xy = conf_b_lm8uu;
+bushing_z = conf_b_lm8uu;
+// for longer bearings use one shorter in x-carriage to make place for belt attachment
+// by default use same as xy
+bushing_carriage = bushing_xy;
+
 // LM8UU dimensions
 LM8UU_dia = 15.2;
 LM8UU_length = 24;
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
 LM8UU_height = LM8UU_dia/2+2;
 
+//Check to be sure the pulley doesn't hit the Y bed
+echo("Y pulley height", pulley_height + pulley_height_from_motor);
+echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
+
+
+// Select idler bearing size **************************************************
+// [outer_diameter, width, inner_diameter, uses_guide]
+// 608 [standard skate bearings] with bearing guide
+bearing_608 = [22, 7, 8, 1];
+//608 bearings with fender washers
+bearing_608_washers = [22, 10, 8, 0];
+// 624 [roughly same diameter as pulley, makes belt parallel so its prettier]
+bearing_624 = [16, 5, 4, 1];
+// two 624 - for use without bearing guides. My favourite [ax]
+bearing_624_double = [16, 10, 4, 0];
+// Size for 1/4" R4RS bearing
+bearing_R4RS = [15.875, 4.9784, 6.35, 0];
+// Size for 6mm 626RS bearing
+bearing_626RS = [19, 6, 6, 0];
+
+y_idler_washer_thickness=1.5875;
+
+x_idler_bearing = bearing_624_double;
+y_idler_bearing = bearing_R4RS;
+
+// Fillets ********************************************************************
+// mostly cosmetic, except z axis.
+// 0 = no fillets
+// 1 = fillet
+
+use_fillets = 1;
+
+//set to 0 for single plate (affects z axis)
+i_am_box = 1;
+
+//if you do your own plate and can move bottom Z screws 5mm up set this to 0 to
+//get stronger motor mount. Only for i_am_box = 0
+i_want_to_use_single_plate_dxf_and_make_my_z_weaker = 1;
+
+//radius of long threaded rod on Y frame
+//Use 5.4 for M10 or 4.4 for M8
+y_threaded_rod_long_r = 5.4;
+
+// Thickness of the XZ plate board. Leave at 12 for single plate
+board_thickness = 12;
+
+// END of custom settings
+
+// *******************
+// Distance between Y rods
 //y_rod_separation=100;
 y_rod_separation=148;
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+7;
 y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley_belt_center + pulley_height_from_motor);
 
-// test pulley height
-//echo("Y clearance from bed bottom to frame", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
-//echo("Y pulley center", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
-//Check to be sure the pulley doesn't hit the Y bed
-echo("Y pulley height", pulley_height + pulley_height_from_motor);
-echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
-
-// This is where the center of the belt clamp will be, as compared to the Y platform bottom.
-echo("Y Belt Clamp height", y_belt_center);
-
 // this setting is for the Prusa i2 bed
 y_belt_clamp_hole_distance=18;
-
-//Bearing version
-// 0 = default lm8uu
-// 1 = lme8uu
-bearing_type = 0;
-
-// Select idler bearing size **************************************************
-// Size for 1/4" R4RS bearing
-y_idler_size=15.875;
-y_idler_size_inner_r=6.35/2;
-y_idler_width=4.9784;
-
-y_idler_washer_thickness=1.5875;
-
-// Size for 6mm 626RS bearing
-// y_idler_size=19;
-// y_idler_size_inner_r=6/2;
-// y_idler_width=6;
-
-// 0 = 608 [standard skate bearings]
-// 1 = 624 [roughly same diameter as pulley, makes belt parallel so its prettier]
-
-idler_bearing = 0;
-
-//Layer height * width over thickness. Used for idler sleeve
-single_wall_width = 0.3*2.2;
-
-// END of custom settings
-
+// *******************
 
 // You are not supposed to change this
+board_to_xz_distance = 26;
 xaxis_rod_distance = 45;
-carriage_l = 74;
-carriage_hole_to_side = 5;
-carriage_hole_height = 4;
 
 //calculated from settings
+single_wall_width = width_over_thickness * layer_height;
 
-idler_size = (idler_bearing == 0) ? 22 : 13;
+x_idler_width = (x_idler_bearing[1] > 7 ? x_idler_bearing[1] : 7) + 2.5 * x_idler_bearing[3] ;
+y_idler_width = (y_idler_bearing[1] > 7 ? y_idler_bearing[1] : 7) + 2.5 * y_idler_bearing[3] ;
 
-//use 4.5 for 608, 2.5 for 624
-idler_size_inner_r = (idler_bearing == 0) ? 4.5 : 2.5;
+//deltas are used to enlarge parts for bigger bearings 
+xy_delta = ((bushing_xy[1] <= 7.7) ? 0 : bushing_xy[1] - 7.7) * 0.9;
+z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 
-idler_width = (idler_bearing == 0) ? 9 : 5;
+// CHANGE ONLY THE STUFF YOU KNOW
+// IT WILL REPLACE DEFAULT SETTING
 
+// RODS
+
+// threaded_rod_diameter = 0;
+// threaded_rod_diameter_horizontal = 0;
+// smooth_bar_diameter = 0;
+// smooth_bar_diameter_horizontal = 0;
+
+// Nuts and bolts
+
+// m8_diameter = 0;
+// m8_nut_diameter = 0;
+
+// m4_diameter = 0;
+// m4_nut_diameter = 0;
+
+// m3_diameter = 0;
+// m3_nut_diameter = 0;
+
+// Bushing holder
+
+// bushing_core_diameter = smooth_bar_diameter;
+// bushing_material_thickness = 0;
 
 ///counted stuff
 m3_nut_diameter_bigger = ((m3_nut_diameter  / 2) / cos (180 / 6))*2;
+
+
 
 // These constants define the geometry of the complete-printer.scad
 
 //x_smooth_rod_length=325;
 //y_smooth_rod_length=405;
 //z_smooth_rod_length=235;
-
-x_smooth_rod_length=450; // 492 for 16mm thickness; 484 for 12mm thickness
-y_smooth_rod_length=470;
-z_smooth_rod_length=405;  
 bed_x_size=225;
 bed_y_size=225;
+
+x_smooth_rod_length=460+board_thickness*2; // 492 for 16mm thickness; 484 for 12mm thickness
+y_smooth_rod_length=470;
+z_smooth_rod_length=405;
