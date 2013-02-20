@@ -52,13 +52,9 @@ module x_end_base(vfillet=[3, 3, 3, 3], thru=true, len=40){
             translate([-10 - bushing_xy[0], -10 + len / 2, 30]) cube_fillet([x_box_width, len, x_box_height], center=true, vertical=vfillet, top=[5, 3, 5, 3]);
 
             translate([0, 0, 4 - bushing_xy[0]]) {
-                //rotate([0, 0, 0]) translate([0, -9.5, 0]) 
                 translate([z_delta, 0, 0]) linear(bushing_z, x_box_height);
                 // Nut trap
-                //difference(){
                 translate([-2, 17, 4]) cube_fillet([20, 16, 8], center = true, vertical=[6, 0, 0, 0], $fn=4);
-                    //bottom hole
-                //}
             }
         }
         // here are bushings/bearings
@@ -66,7 +62,8 @@ module x_end_base(vfillet=[3, 3, 3, 3], thru=true, len=40){
 
         // belt hole
         translate([-5.5-10+1.5, 22-9, 30]) cube([x_idler_width + 1, 55, 27], center = true);
-
+	
+	// Rod holes
         translate([-10 - bushing_xy[0], 0, 0]) {
             if(thru == true){
                 translate([0, -11, 6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.2, 50);
@@ -104,9 +101,9 @@ module x_end_idler(){
     }
 }
 
-mirror([0, 0, 0]) x_end_idler(thru=true);
-// translate([40, 40, 0]) x_end_idler(thru=false);
-translate([50, 0, 0]) x_end_motor();
+//rotate([0, 0, -90]) x_end_idler(thru=true);
+x_end_idler(thru=true);
+// translate([70, 0, 0]) rotate([0, 0, -90]) x_end_motor();
 
 module pushfit_rod(diameter, length){
     cylinder(h = length, r=diameter/2, $fn=30);
