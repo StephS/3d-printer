@@ -3,6 +3,7 @@ use <rod_motor_holder.scad>
 use <extrusion.scad>
 use <x-end.scad>
 use <x-carriage.scad>
+use <bushing.scad>
 
 // Y length bars
 translate(v = [x_width/2 - extrusion_width/2,0,extrusion_width*1.5]) rotate(a=[90,0,0]) extrusion(length= y_length);
@@ -58,18 +59,31 @@ translate([0, -support_wall_thickness-stepper_motor_padded/2-extrusion_width/2, 
 echo("X axis smooth rod length = ", x_width+100);
 
 
-// y axis smooth rod mount
-translate(v = [y_rod_separation/2,y_length/2 + extrusion_width/2,extrusion_width*2]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
-mirror([1,0,0]) translate(v = [y_rod_separation/2,y_length/2 + extrusion_width/2,extrusion_width*2]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
-mirror([0,1,0]) {
-	translate(v = [y_rod_separation/2,y_length/2 + extrusion_width/2,extrusion_width*2]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
-	mirror([1,0,0]) translate(v = [y_rod_separation/2,y_length/2 + extrusion_width/2,extrusion_width*2]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+translate(v = [y_rod_separation/2, 0, extrusion_width*2]) {
+	// y axis smooth rod mounts
+	translate(v = [0, y_length/2 + extrusion_width/2, 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	translate(v = [0, -(y_length/2 + extrusion_width/2), 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	// Y axis Bed bearing clamps
+	translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+	translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+	// y axis smooth rod
+	translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_length+extrusion_width*2, center = true);
+}
+mirror([1, 0, 0]) {
+translate(v = [y_rod_separation/2, 0, extrusion_width*2]) {
+	// y axis smooth rod mounts
+	translate(v = [0, y_length/2 + extrusion_width/2, 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	translate(v = [0, -(y_length/2 + extrusion_width/2), 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	// Y axis Bed bearing clamps
+	translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+	translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+	// y axis smooth rod
+	translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_length+extrusion_width*2, center = true);
+}
 }
 
+// Motor and idler mounts
 translate(v = [0,y_length/2,extrusion_width*2]) rotate(a=[0,0,-90]) y_motor_mount();
 translate(v = [0,-y_length/2-extrusion_width/2,extrusion_width*2]) rotate(a=[0,0,-90]) y_idler_mount();
 
-// y axis smooth rod
-translate(v = [y_rod_separation/2,0,5+y_rod_height+extrusion_width*2]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_length+extrusion_width*2, center = true);
-mirror([1,0,0]) translate(v = [y_rod_separation/2,0,5+y_rod_height+extrusion_width*2]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_length+extrusion_width*2, center = true);
 echo("Y axis smooth rod length = ", y_length+extrusion_width*2);

@@ -60,11 +60,20 @@ motor_mount_thickness=10;
 smooth_rod_diameter=8;
 
 // extrusion parameters
+// width = inch;
+// slot = 6.5;
+// thin_wall=2.21;
+// wall_width=9.46;
+// center_channel=9.02;
+
 extrusion_width = inch;
-extrusion_slot = 6.5;
+extrusion_slot_width = 6.477;
+extrusion_slot_inner_width = 14.859;
+extrusion_corner_square_width = (extrusion_width-extrusion_slot_inner_width)/2;
 extrusion_thin_wall=2.21;
-extrusion_wall_width=9.46;
-extrusion_center_channel=9.02;
+extrusion_wall_width=(extrusion_width-extrusion_slot_width)/2;
+extrusion_center_square=9.02;
+extrusion_hole_dia=5.2;
 
 // extrusion lengths
 y_length_in = 16;
@@ -144,7 +153,9 @@ board_thickness = 12;
 // *******************
 // Distance between Y rods
 //y_rod_separation=100;
-y_rod_separation=148;
+y_rod_separation=140;
+y_clamp_separation=100;
+
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+7;
 y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
