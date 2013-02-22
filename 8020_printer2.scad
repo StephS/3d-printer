@@ -43,13 +43,14 @@ mirror([1,0,0]) translate([x_width/2 +(stepper_motor_padded/2), -support_wall_th
 
 // X axis ends
 translate([0, -support_wall_thickness-stepper_motor_padded/2-extrusion_width/2, z_height/2+extrusion_width*2]) {
-	translate([-(x_width/2 +(z_screw_rod_separation+stepper_motor_padded/2)), 0, 0]) rotate([0, 0, -90]) x_end_idler(thru=true);
-	translate([(x_width/2 +(z_screw_rod_separation+stepper_motor_padded/2)),0 ,0]) rotate([0, 0, -90]) x_end_motor();
+	translate([(x_width/2 +(z_screw_rod_separation+stepper_motor_padded/2)), 0, 52 + 2 * bushing_xy[0]-3]) rotate([180, 0, -90]) x_end_idler(thru=true);
+	translate([-(x_width/2 +(z_screw_rod_separation+stepper_motor_padded/2)),0 ,52 + 2 * bushing_xy[0]-3]) rotate([180, 0, -90]) x_end_motor();
+	
 	// x axis smooth rod
 	// the width of the rod block is 50, we have 2, so add in 100
 	translate([0, 10 + bushing_xy[0], 0]) {
-		translate([-4, 0, 6]) rotate([0, -90, 0]) color("DimGray") cylinder(h = x_width+100, r=bushing_xy[0], $fn=30, center=true);
-		translate([-4, 0, xaxis_rod_distance+6]) rotate([0, -90, 0]) color("DimGray") cylinder(h = x_width+100, r=bushing_xy[0], $fn=30, center=true);
+		translate([+4, 0, 6]) rotate([0, -90, 0]) color("DimGray") cylinder(h = x_width+100, r=bushing_xy[0], $fn=30, center=true);
+		translate([+4, 0, xaxis_rod_distance+6]) rotate([0, -90, 0]) color("DimGray") cylinder(h = x_width+100, r=bushing_xy[0], $fn=30, center=true);
 		//X axis carriage
 		translate([0, 0, 6]) rotate([0,90,0]) x_carriage();
 	}

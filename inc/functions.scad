@@ -116,12 +116,31 @@ module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, $fn=
         }
     }
     if (shadow != false) {
-        %translate ([0, 0, shadow+21+3]) cube([42,42,42], center = true);
-    //flange
-        %translate ([0, 0, shadow+21+3-21-1]) cylinder(r=11,h=2, center = true, $fn=20);
-    //shaft
-        %translate ([0, 0, shadow+21+3-21-7]) cylinder(r=2.5,h=14, center = true);
+        %translate ([0, 0, shadow+3+42]) mirror([0,0,1]) nema17_motor();
     }
+}
+
+module nema17_motor(height=42, color=true) {
+	union() {
+        % translate ([0, 0, height/2]) cube([42,42,height], center = true);
+	//flange
+        % translate ([0, 0, height+1]) cylinder(r=11,h=2, center = true, $fn=20);
+	//shaft
+        % translate ([0, 0, height+7]) cylinder(r=2.5,h=14, center = true);
+	}
+}
+
+module belt_pulley()
+{
+	difference() {
+		union() {
+			translate ([0, 0, pulley[1]/2]) cylinder(r=pulley[6]/2,h=pulley[1], center = true);
+			translate ([0, 0, (pulley[0]-pulley[1]-pulley[2])/2/2+pulley[1]]) cylinder(r=pulley[7]/2,h=(pulley[0]-pulley[1]-pulley[2])/2, center = true);
+			translate ([0, 0, pulley[1]+(pulley[0]-pulley[1]-pulley[2])/2+pulley[2]/2]) cylinder(r=pulley[5]/2,h=pulley[2], center = true);
+			translate ([0, 0, pulley[1]+(pulley[0]-pulley[1]-pulley[2])/2+pulley[2]+(pulley[0]-pulley[1]-pulley[2])/2/2]) cylinder(r=pulley[7]/2,h=(pulley[0]-pulley[1]-pulley[2])/2, center = true);
+		}
+		translate ([0, 0, pulley[0]/2]) cylinder(r=2.5,h=pulley[0]+1, center = true);
+	}
 }
 
 module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=i_am_box, poly=false, $fn=0){

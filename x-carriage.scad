@@ -83,9 +83,9 @@ module x_carriage(){
                         translate([-3.5,0,(carriage_l+38)/2]) cube([13,10,8], center = true);
                         translate([-8.5, 0, 0]) cube([2, 10, bushing_carriage_len * 2 + 3], center = true);
                         intersection() {
-                            for (i = [0 : x_beltclamp_space / belt_tooth_distance])
+                            for (i = [0 : x_beltclamp_space / belt[0]])
                             {
-                                translate([-8.5, 0, carriage_l - i * belt_tooth_distance]) cube([2, 10, belt_tooth_distance*belt_tooth_ratio], center = true);
+                                translate([-8.5, 0, carriage_l - i * belt[0]]) cube([2, 10, belt[0]*belt[1]], center = true);
                             }
                             translate([0, 0, carriage_l/2]) cube([20, 10, carriage_l], center = true);
                         }

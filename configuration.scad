@@ -13,6 +13,7 @@
 include <inc/functions.scad>
 include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
+include <inc/belts_pulleys.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
 
@@ -21,41 +22,23 @@ width_over_thickness = 2.2;
 inch = 25.4;
 
 // Select your belt type ******************************************************
+//T2.5 conf_belt_T2_5
+//T5 (strongly discouraged) conf_belt_T5
+//HTD3 conf_belt_HTD3
+//MXL conf_belt_MXL
+//GT2 conf_belt_GT2
+//GT2-3mm conf_belt_GT2_3mm
 
-//T2.5
-//belt_tooth_distance = 2.5;
-//belt_tooth_ratio = 0.5;
-//belt_tooth_height = 0.7;
-//belt_height = 1.3;
-//belt_base_height = belt_height - belt_tooth_height;
-
-//T5 (strongly discouraged)
-//belt_tooth_distance = 5;
-//belt_tooth_ratio = 0.75;
-
-//HTD3
-//belt_tooth_distance = 3;
-//belt_tooth_ratio = 0.75;
-
-//MXL
-//belt_tooth_distance = 2.032;
-//belt_tooth_ratio = 0.64;
-
-//GT2
-//belt_tooth_distance = 2;
-//belt_tooth_ratio = 0.5;
-//belt_tooth_height = 0.76;
-//belt_height = 1.52;
-//belt_base_height = belt_height - belt_tooth_height;
-
-//GT2-3mm
-belt_tooth_distance = 3;
-belt_tooth_ratio = 0.5;
-belt_tooth_height = 1.14;
-belt_height = 2.41;
-belt_base_height = belt_height - belt_tooth_height;
+belt = conf_belt_GT2_3mm;
 belt_width = 7;
 
+// Select your pulley type ******************************************************
+// GT2-3mm 17 groove pulley conf_pulley_17_GT2_3mm
+// GT2 36 groove pulley conf_pulley_36_GT2
+
+pulley = conf_pulley_17_GT2_3mm;
+// the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
+pulley_height_from_motor=3;
 
 // Stepper motor dimensions
 stepper_motor_width=42;
@@ -95,19 +78,6 @@ z_height = z_height_in * inch;
 top_x_width = top_x_width_in * inch + (extrusion_width*2);
 echo ("top and bottom extrusion lengths = ", top_x_width/inch);
 
-// values for GT3 16 groove pulley
-pulley_height=20.6;
-pulley_hub_height=6.3;
-pulley_belt_height=11.1;
-pulley_setscrew_height=3.5;
-pulley_setscrew_diameter=5;
-pulley_diameter=14.5;
-pulley_hub_diameter=17.5;
-pulley_outer_diameter=21;
-pulley_belt_center=(pulley_height-pulley_hub_height)/2+pulley_hub_height;
-// the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
-pulley_height_from_motor=3;
-
 // Choose bearing/bushing configuration ***************************************
 // conf_b_* are in inc/conf_bushing.scad
 
@@ -124,7 +94,7 @@ LM8UU_length = 24;
 LM8UU_height = LM8UU_dia/2+2;
 
 //Check to be sure the pulley doesn't hit the Y bed
-echo("Y pulley height", pulley_height + pulley_height_from_motor);
+echo("Y pulley height", pulley[0] + pulley_height_from_motor);
 echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
 
 
@@ -177,7 +147,7 @@ board_thickness = 12;
 y_rod_separation=148;
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+7;
-y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley_belt_center + pulley_height_from_motor);
+y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
 y_belt_clamp_hole_distance=18;

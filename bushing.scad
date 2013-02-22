@@ -191,7 +191,7 @@ module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_hei
 	difference() {
 		bearing_clamp_brick2(conf_b,w1,w2,h);
 		
-            translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) %cylinder(r=m3_diameter / 2, h=w1+2, center=true);
+            translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
 
 		// nut trap
 		translate([m3_diameter / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
