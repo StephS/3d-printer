@@ -13,6 +13,7 @@
 include <inc/functions.scad>
 include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
+include <inc/conf_extrusion.scad>;
 include <inc/belts_pulleys.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
@@ -60,20 +61,7 @@ motor_mount_thickness=10;
 smooth_rod_diameter=8;
 
 // extrusion parameters
-// width = inch;
-// slot = 6.5;
-// thin_wall=2.21;
-// wall_width=9.46;
-// center_channel=9.02;
-
-extrusion_width = inch;
-extrusion_slot_width = 6.477;
-extrusion_slot_inner_width = 14.859;
-extrusion_corner_square_width = (extrusion_width-extrusion_slot_inner_width)/2;
-extrusion_thin_wall=2.21;
-extrusion_wall_width=(extrusion_width-extrusion_slot_width)/2;
-extrusion_center_square=9.02;
-extrusion_hole_dia=5.2;
+extrusion = conf_ex_8020_10s;
 
 // extrusion lengths
 y_length_in = 16;
@@ -84,7 +72,7 @@ top_x_width_in=x_width_in;
 y_length = y_length_in * inch;
 x_width = x_width_in * inch;
 z_height = z_height_in * inch;
-top_x_width = top_x_width_in * inch + (extrusion_width*2);
+top_x_width = top_x_width_in * inch + (extrusion[0]*2);
 echo ("top and bottom extrusion lengths = ", top_x_width/inch);
 
 // Choose bearing/bushing configuration ***************************************
