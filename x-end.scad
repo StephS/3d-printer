@@ -101,10 +101,6 @@ module x_end_idler(){
     }
 }
 
-//rotate([0, 0, -90]) x_end_idler(thru=true);
-x_end_idler(thru=true);
-// translate([70, 0, 0]) rotate([0, 0, -90]) x_end_motor();
-
 module pushfit_rod(diameter, length){
     cylinder(h = length, r=diameter/2, $fn=30);
     translate([0, -diameter/4, length/2]) cube([diameter, diameter/2, length], center = true);
@@ -119,3 +115,6 @@ if (x_idler_bearing[3] > 0) {
             render() bearing_guide_outer(x_idler_bearing);
     }
 }
+
+translate([-40, 0, 0]) rotate([0, 0, -90]) x_end_idler(thru=true);
+translate([30, 0, 0]) rotate([0, 0, -90]) x_end_motor();

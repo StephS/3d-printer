@@ -157,10 +157,16 @@ module y_idler_mount() {
 
 //y_idler_mount();
 //translate([0, 0, motor_mount_thickness]) rotate(a=[0,180,0]) y_motor_mount();
-//z_motor_mount();
-//smooth_rod_mount();
-z_rod_mount();
 
+ translate([extrusion[0]+2, 0, 0]) z_motor_mount();
+ translate([-extrusion[0]-2, 0, 0]) mirror([1,0,0]) z_motor_mount();
+
+// Y rod mount (print 4)
+//translate([0, 0, extrusion[0]/2]) smooth_rod_mount();
+
+// Z rod mounts
+//translate([-(smooth_rod_diameter/2 + support_wall_thickness+2), 0, extrusion[0]/2]) z_rod_mount();
+//translate([smooth_rod_diameter/2 + support_wall_thickness+2, 0, extrusion[0]/2]) mirror([1,0,0]) z_rod_mount();
 
 
 
