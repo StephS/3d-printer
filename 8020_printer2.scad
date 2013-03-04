@@ -61,8 +61,8 @@ echo("X axis smooth rod length = ", x_width+100);
 
 translate(v = [y_rod_separation/2, 0, extrusion[0]*2]) {
 	// y axis smooth rod mounts
-	translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
-	translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
+	translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 	// Y axis Bed bearing clamps
 	translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 	translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
@@ -72,8 +72,8 @@ translate(v = [y_rod_separation/2, 0, extrusion[0]*2]) {
 mirror([1, 0, 0]) {
 translate(v = [y_rod_separation/2, 0, extrusion[0]*2]) {
 	// y axis smooth rod mounts
-	translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
-	translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) smooth_rod_mount(height=y_rod_height);
+	translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
+	translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 	// Y axis Bed bearing clamps
 	translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 	translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();

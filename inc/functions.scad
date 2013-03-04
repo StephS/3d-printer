@@ -130,6 +130,30 @@ module nema17_motor(height=42, color=true) {
 	}
 }
 
+module motor_plate(thickness=10, width=stepper_motor_width){
+    difference(){
+        union(){
+            // Motor holding part
+            difference(){
+                union(){
+                   nema17(places=[1,1,1,1], h=thickness);
+                   translate([0, 0, thickness/2]) cube([width,width,thickness], center = true);
+                }
+
+                // motor screw holes
+                translate([0, 0, thickness]) {
+                    mirror([0,0,1]) translate([0,0,thickness-8])
+                        nema17(places=[1,1,1,1], holes=true, h=thickness);
+						
+                }
+					// center hole
+					translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);
+            }
+				translate([0, 0, -42]) nema17_motor();
+        }
+    }
+}
+
 module belt_pulley()
 {
 	difference() {

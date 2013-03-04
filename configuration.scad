@@ -61,6 +61,11 @@ motor_mount_thickness=10;
 smooth_rod_diameter=8;
 
 // extrusion parameters
+// 10 series 8020 (inch) conf_ex_8020_10s
+// 15 series 8020 (inch) conf_ex_8020_15s
+// 20 series 8020 conf_ex_8020_20s
+// 25 series 8020 conf_ex_8020_25s
+// 30 series 8020 conf_ex_8020_30s
 extrusion = conf_ex_8020_10s;
 
 // extrusion lengths
