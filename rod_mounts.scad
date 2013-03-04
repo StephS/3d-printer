@@ -46,7 +46,7 @@ module y_idler() {
 module y_idler_mount() {
 	difference() {
 		union() {
-			#translate([0, 0, motor_mount_thickness/2]) cube([extrusion[0],ex_screw_head_dia_padded+y_idler_bearing[0],motor_mount_thickness], center = true);
+			translate([0, 0, motor_mount_thickness/2]) cube([extrusion[0],ex_screw_head_dia_padded+y_idler_bearing[0],motor_mount_thickness], center = true);
 			translate([0, 0, ((pulley[8]+pulley_height_from_motor)-y_idler_bearing[1]/2-y_idler_washer_thickness)/2]) cylinder(r=extrusion[0]/2,h=(pulley[8]+pulley_height_from_motor)-y_idler_bearing[1]/2-y_idler_washer_thickness, center = true);
 			translate([0, -y_idler_bearing[0]/2-ex_screw_head_dia_padded/2, motor_mount_thickness/2]) cylinder(r=extrusion[0]/2,h=motor_mount_thickness, center = true);
 			translate([0, y_idler_bearing[0]/2+ex_screw_head_dia_padded/2, motor_mount_thickness/2]) cylinder(r=extrusion[0]/2,h=motor_mount_thickness, center = true);
