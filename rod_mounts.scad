@@ -30,6 +30,7 @@ module z_rod_mount(height=stepper_motor_padded/2) {
 		}
 		translate([0, -support_wall_thickness-height, 0]) cylinder(r=smooth_rod_diameter/2,h=extrusion[0]+1, center = true);
 		translate([- end_x - (extrusion[0])/2, (-support_wall_thickness)/2, 0]) rotate(a=[90,0,0]) cylinder(r=ex_screw_hole_diameter/2,h=support_wall_thickness+1, center = true);
+		translate([-end_x, 0, 0]) cylinder(r=1.2, h=extrusion[0]+1, $fn=8, center=true);
 		translate([-(-end_x+ smooth_rod_diameter/2 + support_wall_thickness)/2, extrusion[0]/2, 0]) rotate(a=[0,90,0]) cylinder(r=ex_screw_hole_diameter/2,h=end_x+extrusion[0]+smooth_rod_diameter/2 + support_wall_thickness, center = true);
 		translate([-((end_x + extrusion[0]) - (support_wall_thickness + smooth_rod_diameter/2)) - smooth_rod_diameter/2 - support_wall_thickness, -(height) -support_wall_thickness,support_wall_thickness/2-extrusion[0]/2]) rotate(a=[90,0,180]) chamfer(x=((end_x + extrusion[0]) -(support_wall_thickness + smooth_rod_diameter/2)),z=height);
 	}
@@ -70,24 +71,3 @@ translate([smooth_rod_diameter+support_wall_thickness*2+ex_screw_head_dia_padded
 // Z rod mounts
 translate([-(smooth_rod_diameter/2 + support_wall_thickness+2), -extrusion[0]-2, extrusion[0]/2]) z_rod_mount();
 translate([smooth_rod_diameter/2 + support_wall_thickness+2, -extrusion[0]-2, extrusion[0]/2]) mirror([1,0,0]) z_rod_mount();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
