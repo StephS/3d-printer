@@ -1,3 +1,8 @@
+// Nuts_screws.scad
+// Released under Attribution 3.0 Unported (CC BY 3.0) 
+// http://creativecommons.org/licenses/by/3.0/
+// Stephanie Shaltes
+
 // Screw parameters
 // diameter = 1
 // head_dia_bottom = 2
