@@ -56,7 +56,7 @@ module y_motor_mount() {
 			% translate ([0, 0, pulley_height_from_motor]) belt_pulley();
 		}
 		difference() {
-			#translate([(support_wall_thickness+ex_screw_head_height)/2,0,-extrusion[0]/2+motor_mount_thickness/2]) cube([support_wall_thickness+ex_screw_head_height,stepper_motor_padded,motor_mount_thickness+extrusion[0]], center = true);
+			translate([(support_wall_thickness+ex_screw_head_height)/2,0,-extrusion[0]/2+motor_mount_thickness/2]) cube([support_wall_thickness+ex_screw_head_height,stepper_motor_padded,motor_mount_thickness+extrusion[0]], center = true);
 			translate([(support_wall_thickness+ex_screw_head_height)/2,0,-extrusion[0]/2]) rotate(a=[0,90,0]) cylinder(r=ex_screw_hole_diameter/2,h=support_wall_thickness+ex_screw_head_height+1, center = true);
 			translate([support_wall_thickness+(ex_screw_head_height)/2+1,0,-extrusion[0]/2]) rotate(a=[0,90,0]) cylinder(r=ex_screw_head_dia/2,h=ex_screw_head_height+1, center = true);
 		}
