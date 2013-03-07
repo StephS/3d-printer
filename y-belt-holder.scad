@@ -24,9 +24,9 @@ module i3_belt_clamp() {
 			}
 		}
 	translate([17.5, (14/2-(belt[2]+0.1))/2+(belt[2]+0.1), (belt_width+1)/2 + (y_belt_center-(belt_width+1)/2)]) cube([belt[3]*3, 14/2+(belt[2]+0.1), belt_width+1], center = true);
-	translate([5, -12, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw();
-	translate([5, 12, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw();
-	translate([40, 0, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw();
+	translate([5, -12, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw_hole(type=y_bearing_screw);
+	translate([5, 12, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw_hole(type=y_bearing_screw);
+	translate([40, 0, (y_belt_center-(belt_width+1)/2)]) rotate([0, 180, 0]) screw_hole(type=y_bearing_screw);
 	}
 }
 
@@ -44,8 +44,8 @@ module i2_belt_clamp() {
 			}
 		}
 	translate([(belt_width+1)/2 + (y_belt_center-(belt_width+1)/2), (14/2-(belt[2]+0.1))/2+(belt[2]+0.1), 17.5]) cube([belt_width+1, 14/2+(belt[2]+0.1), belt[3]*3], center = true);
-	translate([0, -y_belt_clamp_hole_distance/2, y_belt_center-(belt_width+1)/2]) rotate([0, 180, 0]) screw();
-	translate([0, y_belt_clamp_hole_distance/2, y_belt_center-(belt_width+1)/2]) rotate([0, 180, 0]) screw();
+	translate([0, -y_belt_clamp_hole_distance/2, y_belt_center-(belt_width+1)/2]) rotate([0, 180, 0]) screw_hole(type=y_bearing_screw);
+	translate([0, y_belt_clamp_hole_distance/2, y_belt_center-(belt_width+1)/2]) rotate([0, 180, 0]) screw_hole(type=y_bearing_screw);
 	}
 }
 
