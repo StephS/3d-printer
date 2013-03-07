@@ -22,7 +22,7 @@ function screw_head_top_dia(type)  = type[2] * type[4];
 function screw_head_height(type) = type[3] * type[4];
 // diameter = 0; head_dia_bottom = 1; head_dia_top = 2; head_height = 3
 // multiplier = 4 (this is set to 1 since it will already be converted. So you can still use screw_dia, etc.)
-function v_screw_hole(type) = [screw_dia(type)+screw_hole_allowance, screw_head_bottom_dia(type)+screw_head_allowance, screw_head_top_dia(type)+screw_head_allowance, screw_head_height(type), 1];
+function v_screw_hole(type, hole_allowance=screw_hole_allowance, head_allowance=screw_head_allowance) = [screw_dia(type)+hole_allowance, screw_head_bottom_dia(type)+head_allowance, screw_head_top_dia(type)+head_allowance, screw_head_height(type), 1];
 
 //************* nut access functions *************
 function nut_dia(type)  = type[0] * type[3];
@@ -43,43 +43,82 @@ function v_washer_hole(type) = [washer_dia(type), washer_outer_dia(type)+washer_
 // modules
 module screw(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=12, hole=false ){
     //makes screw with head
-    head_bottom_dia= (hole && washer_type[0]>0) ? washer_outer_dia(washer_type) : screw_head_bottom_dia(type);
-    head_top_dia= (hole && washer_type[0]>0) ? washer_outer_dia(washer_type) : screw_head_top_dia(type);
     
-    translate([0, 0, head_drop-washer_thickness(washer_type)]) {
-	    if (poly) {
-	        cylinder_poly(h=h, r=screw_dia(type)/2, $fn=$fn);
-	    } else {
-	        cylinder(h=h, r=screw_dia(type)/2, $fn=$fn);
-	    }
-	    
-	    translate([0, 0, (screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? 0 : -screw_head_height(type)]) {
-			translate([0, 0, screw_head_height(type)]) washer(type=washer_type);
-	    	cylinder(h=screw_head_height(type), r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
-	        if (head_drop > 0) {
-		        translate([0, 0, -head_drop-0.01]) cylinder(h=head_drop+0.01, r=head_top_dia/2, $fn=$fn);
-	    	}
+    head_bottom_dia= screw_head_bottom_dia(type);
+    head_top_dia= screw_head_top_dia(type);
+	
+	head_height= screw_head_height(type);
+	
+    union() {
+	    translate([0, 0, head_drop- ((washer_type[0]>0) ? washer_thickness(washer_type) : 0)]) {
+			translate([0, 0, -0.01]) {
+			    if (poly) {
+			        cylinder_poly(h=h+0.01, r=screw_dia(type)/2, $fn=$fn);
+			    } else {
+			        cylinder(h=h+0.01, r=screw_dia(type)/2, $fn=$fn);
+			    }
+			}
+		    
+		    translate([0, 0, ((screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? 0 : -head_height)]) {
+				translate([0, 0, head_height]) washer(type=washer_type, $fn=$fn);
+		    	translate([0, 0, -0.01])
+		    	cylinder(h=head_height+0.02, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
+			}
 		}
 	}
 }
 
-module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=12){
-	screw(h=h, head_drop=head_drop, type=v_screw_hole(type), washer_type=v_washer_hole(washer_type), poly=poly, $fn=$fn, hole=true);
+module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=12, hole=false ){
+    //makes screw with head
+    screw=v_screw_hole(type, head_allowance=(screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance);
+    
+    head_bottom_dia= (washer_type[0]>0) ? washer_outer_dia(v_washer_hole(washer_type)) : screw_head_bottom_dia(screw);
+    head_top_dia= (washer_type[0]>0) ? washer_outer_dia(v_washer_hole(washer_type)) : screw_head_top_dia(screw);
+	
+	head_height = ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw) : head_drop);
+	head_drop1= ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw)+head_drop : head_drop);
+	
+    rotate([0,0, 180/$fn]) render(convexity = 2) union() {
+	    translate([0, 0, head_drop1]) {
+			translate([0, 0, -0.01]) {
+			    if (poly) {
+			        cylinder_poly(h=h+0.01, r=screw_dia(screw)/2, $fn=$fn);
+			    } else {
+			        cylinder(h=h+0.01, r=screw_dia(screw)/2, $fn=$fn);
+			    }
+			}
+		    
+		    if (head_height>0) {
+			    translate([0, 0, -head_height-0.01]) {
+					cylinder(h=head_height+0.01, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
+				}
+				translate([0, 0, -head_drop1])
+				cylinder(h=head_drop1-head_height, r=head_top_dia/2, $fn=$fn);
+			}
+		}
+	}
 }
+
+/*
+module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=12){
+	// beveled screws use the tighter allowance for the head
+	screw(h=h, head_drop=head_drop, type=v_screw_hole(type, head_allowance=(screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance), washer_type=v_washer_hole(washer_type), poly=poly, $fn=$fn, hole=true);
+}
+*/
 
 module nut(type=nut_M3){
 	//makes a nut
-	cylinder(h=nut_thickness(type), r=nut_outer_dia(type)/2, $fn=6);
+	color([150/255, 150/255, 150/255, 0.7]) render(convexity = 12) cylinder(h=nut_thickness(type), r=nut_outer_dia(type)/2, $fn=6);
 }
 
 module nut_hole(type=nut_M3){
 	//makes a nut
-	nut(type=v_nut_hole(type));
+	color([150/255, 150/255, 150/255, 1]) nut(type=v_nut_hole(type));
 }
 
-module washer(type=washer_M3){
+module washer(type=washer_M3, $fn=12){
 	//makes a washer
-	cylinder(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=12);
+	color([150/255, 150/255, 150/255, 0.7]) render() cylinder(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=$fn);
 }
 
 module washer_hole(type=washer_M3){
@@ -316,6 +355,6 @@ nut_jam_inch_5_16 = [ 5/16,  1/2, 3/16, 25.4];
 nut_jam_inch_3_8 =  [  3/8, 9/16, 7/32, 25.4];
 nut_jam_inch_1_2 =  [  1/2,  3/4, 5/16, 25.4];
 
-screw(type=screw_M3_flat_head, head_drop=0, washer_type=washer_M3);
+//screw_hole(type=screw_M3_socket_head, head_drop=0);
 //nut();
 //washer();

@@ -29,11 +29,11 @@ module x_end_motor(){
             }
 
             // motor screw holes
-            translate([21-5, -21-11, 30.25]){
+            translate([-15, -32, 30.25]){
                 // belt hole
-                translate([-30, 11, 0]) cube([10, 36, 20], center = true);
+                translate([1, 11, 0]) cube([10, 36, 20], center = true);
                 //motor mounting holes
-                translate([-29, 0, 0]) rotate([0, 0, 0])  rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, shadow=5, $fn=7, h=8);
+                translate([-7.5, 0, 0]) rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, shadow=14.5, head_drop=17.5-5, $fn=8, h=10);
             }
         }
         //smooth rod caps
@@ -77,7 +77,7 @@ module x_end_base(vfillet=[3, 3, 3, 3], thru=true, len=40){
                     translate([0, 17, -10]) rotate([0,0,45]){
                         cylinder(h = 40, r=2.75);
                         //nut slid in
-                        translate([3, 0, 14]) cube([9.2*2, 9.2*sqrt(3/4)+0.4, 4.1], center = true);
+                        translate([3, 0, 14]) cube([9.2*2, 9.2*sqrt(3/4)+0.4, nut_thickness(v_nut_hole(nut_M5))], center = true);
                     }
         }
     }

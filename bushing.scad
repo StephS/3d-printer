@@ -128,8 +128,8 @@ module firm_foot(conf_b){
         union() {
             translate([8.5/2,0,0]) cube_fillet([8.5, 42 + xy_delta * 2, 20], top=[11, 0, 11, 0], center=true);
         }
-        translate([9, 14.5 + xy_delta, 0]) rotate([0, -90, 0]) screw(head_drop=1);
-        translate([9,-14.5 - xy_delta, 0]) rotate([0,-90,0]) screw(head_drop=1);
+        translate([9, 14.5 + xy_delta, 0]) rotate([0, -90, 0]) screw_hole(type=y_bearing_screw, head_drop=0, $fn=8);
+        translate([9,-14.5 - xy_delta, 0]) rotate([0,-90,0]) screw_hole(type=y_bearing_screw, head_drop=0, $fn=8);
     }
 }
 
@@ -180,9 +180,9 @@ module bearing_clamp(conf_b=bushing_xy, h=0){
 
 module bearing_clamp_brick2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
 	difference() {
-	translate([(conf_b[1]+m3_nut_diameter+0.3)/2,0,h/2]) cube([conf_b[1]+m3_nut_diameter+0.3,w1, h],center=true);
-	translate([(conf_b[1]+m3_nut_diameter+0.3),((w2)/2),-0.5]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+m3_nut_diameter+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+m3_nut_diameter+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
-	translate([(conf_b[1]+m3_nut_diameter+0.3),-(w2/2),-0.5]) mirror([0,1,0]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+m3_nut_diameter+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+m3_nut_diameter+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
+	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3)/2,0,h/2]) cube([conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3,w1, h],center=true);
+	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3),((w2)/2),-0.5]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
+	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3),-(w2/2),-0.5]) mirror([0,1,0]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
 	}
 }
 
@@ -191,17 +191,17 @@ module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_hei
 	difference() {
 		bearing_clamp_brick2(conf_b,w1,w2,h);
 		
-            translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
+		//translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
 
 		// nut trap
 		translate([m3_diameter / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
 			rotate([90,0,0])
-				cylinder(r=m3_nut_diameter_horizontal/2, h=((w1-w2)/2)+1,$fn=6);
+				nut_hole(type=nut_M3);
 	
 		// screw head hole
-		translate([m3_diameter / 2 + conf_b[1] + 0.3, (w2/2), h/2])
-			rotate([-90,0,0])
-				cylinder(r=m3_washer_diameter/2, h=((w1-w2)/2)+1,$fn=20);
+		translate([m3_diameter / 2 + conf_b[1] + 0.3, (w1/2), h/2])
+			rotate([90,0, 0])
+				screw_hole(type=screw_M3_socket_head, h=w1+2, head_drop=(w1-w2)/2, washer_type=washer_M3, $fn=8);
 
 	}
 }

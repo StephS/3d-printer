@@ -6,6 +6,7 @@
 // Vlnofka <>
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
+include <nuts_screws.scad>;
 
 module chamfer(x=10,y=10,z=10) {
  rotate(a=[90,-90,0])
@@ -103,12 +104,12 @@ module cube_fillet_inside(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bo
 }
 
 
-module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, $fn=24){
+module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, $fn=24){
     for (i=[0:3]) {
         if (places[i] == 1) {
             rotate([0, 0, 90*i]) translate([size, size, 0]) {
                 if (holes) {
-                    rotate([0, 0, -90*i])  translate([0,0,-10]) screw(r=1.7, slant=false, head_drop=13, $fn=$fn, h=h+12);
+                    rotate([0, 0, -90*i]) screw_hole(type=screw_M3_socket_head, head_drop=head_drop, $fn=$fn, h=h);
                 } else {
                     rotate([0, 0, -90*i]) cylinder(h=h, r=5.5, $fn=$fn);
                 }
@@ -130,24 +131,21 @@ module nema17_motor(height=42, color=true) {
 	}
 }
 
-module motor_plate(thickness=10, width=stepper_motor_width){
-    difference(){
-        union(){
+module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5){
+	difference(){
+		union(){
             // Motor holding part
             difference(){
-                union(){
-                   nema17(places=[1,1,1,1], h=thickness);
-                   translate([0, 0, thickness/2]) cube([width,width,thickness], center = true);
-                }
+				union(){
+					nema17(places=[1,1,1,1], h=thickness);
+					translate([0, 0, thickness/2]) cube([width,width,thickness], center = true);
+				}
 
                 // motor screw holes
-                translate([0, 0, thickness]) {
-                    mirror([0,0,1]) translate([0,0,thickness-8])
-                        nema17(places=[1,1,1,1], holes=true, h=thickness);
+				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness);
 						
-                }
-					// center hole
-					translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);
+				// center hole
+				translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);
             }
 				translate([0, 0, -42]) nema17_motor();
         }
@@ -165,23 +163,6 @@ module belt_pulley()
 		}
 		translate ([0, 0, pulley[0]/2]) cylinder(r=2.5,h=pulley[0]+1, center = true);
 	}
-}
-
-module screw(h=20, r=2, r_head=3.5, head_drop=0, slant=i_am_box, poly=false, $fn=0){
-    //makes screw with head
-    //for substraction as screw hole
-    if (poly) {
-        cylinder_poly(h=h, r=r, $fn=$fn);
-    } else {
-        cylinder(h=h, r=r, $fn=$fn);
-    }
-    if (slant) {
-        translate([0, 0, head_drop-0.01]) cylinder(h=r_head, r2=0, r1=r_head, $fn=$fn);
-    }
-
-    if (head_drop > 0) {
-        translate([0, 0, -0.01]) cylinder(h=head_drop+0.01, r=r_head, $fn=$fn);
-    }
 }
 
 //radius of the idler assembly (to surface that touches belt, ignoring guide walls)

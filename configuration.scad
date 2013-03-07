@@ -15,6 +15,7 @@ include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
 include <inc/conf_extrusion.scad>;
 include <inc/belts_pulleys.scad>;
+include <inc/nuts_screws.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
 
@@ -48,11 +49,6 @@ stepper_motor_padded=stepper_motor_width+2;
 z_screw_rod_separation=17;
 
 // Screws used to mount to the extrusion
-ex_screw_head_height=3.5;
-ex_screw_head_dia=14;
-ex_screw_diameter=6.35;
-ex_screw_hole_diameter=ex_screw_diameter+0.15;
-ex_screw_head_dia_padded=ex_screw_head_dia+1;
 
 // Thickness of the mounts (do not change unless you check for clearances)
 support_wall_thickness=5;
@@ -79,6 +75,11 @@ x_width = x_width_in * inch;
 z_height = z_height_in * inch;
 top_x_width = top_x_width_in * inch + (extrusion[0]*2);
 echo ("top and bottom extrusion lengths = ", top_x_width/inch);
+
+// Choose screws configuration ***************************************
+y_bearing_screw = screw_M4_flat_head;
+
+ex_screw=screw_8020_1_4_flange_head;
 
 // Choose bearing/bushing configuration ***************************************
 // conf_b_* are in inc/conf_bushing.scad
