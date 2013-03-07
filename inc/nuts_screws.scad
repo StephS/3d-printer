@@ -64,7 +64,7 @@ module screw(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=f
 }
 
 module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=12){
-	screw(h=h, head_drop=head_drop, type=v_screw_hole(type), washer_type=washer_type, poly=poly, $fn=$fn, hole=true);
+	screw(h=h, head_drop=head_drop, type=v_screw_hole(type), washer_type=v_washer_hole(washer_type), poly=poly, $fn=$fn, hole=true);
 }
 
 module nut(type=nut_M3){
