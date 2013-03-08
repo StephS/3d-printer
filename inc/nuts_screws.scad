@@ -2,6 +2,7 @@
 // Released under Attribution 3.0 Unported (CC BY 3.0) 
 // http://creativecommons.org/licenses/by/3.0/
 // Stephanie Shaltes
+include <functions.scad>;
 
 // Allowances for tolerance
 screw_hole_allowance = 0.15;
@@ -78,22 +79,22 @@ module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, p
 	head_height = ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw) : head_drop);
 	head_drop1= ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw)+head_drop : head_drop);
 	
-    rotate([0,0, 180/$fn]) render(convexity = 2) union() {
+    rotate([0,0, 180/(($fn>0) ? $fn : poly_sides(screw_dia(screw)))]) union() {
 	    translate([0, 0, head_drop1]) {
 			translate([0, 0, -0.01]) {
 			    if (poly) {
-			        cylinder_poly(h=h+0.01, r=screw_dia(screw)/2, $fn=$fn);
+			        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
 			    } else {
-			        cylinder(h=h+0.01, r=screw_dia(screw)/2, $fn=$fn);
+			        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
 			    }
 			}
-		    
+		    render(convexity = 4) 
 		    if (head_height>0) {
 			    translate([0, 0, -head_height-0.01]) {
-					cylinder(h=head_height+0.01, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
+					cylinder_poly(h=head_height+0.02, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
 				}
 				translate([0, 0, -head_drop1])
-				cylinder(h=head_drop1-head_height, r=head_top_dia/2, $fn=$fn);
+				cylinder_poly(h=head_drop1-head_height, r=head_top_dia/2, $fn=$fn);
 			}
 		}
 	}
@@ -106,27 +107,28 @@ module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, p
 }
 */
 
-module nut(type=nut_M3){
+module nut(type=nut_M3, h=0){
 	//makes a nut
-	cylinder(h=nut_thickness(type), r=nut_outer_dia(type)/2, $fn=6);
+	cylinder(h=((h>0) ? h : nut_thickness(type)), r=nut_outer_dia(type)/2, $fn=6);
 }
 
-module nut_hole(type=nut_M3){
+module nut_hole(type=nut_M3, h=0){
 	//makes a nut
-	nut(type=v_nut_hole(type));
+	nut(type=v_nut_hole(type), h=h);
 }
 
 module nut_slot_hole(type=nut_M3, h=0){
 	//makes a nut slot
 	union() {
 		nut_hole(type=type);
-		translate([0, -(nut_flat(v_nut_hole(type)))/2, 0]) cube([h, (nut_flat(v_nut_hole(type))), (nut_thickness(v_nut_hole(type)))]);
+		translate([0, -(nut_flat(v_nut_hole(type)))/2, 0]) cube([h+0.01, (nut_flat(v_nut_hole(type))), (nut_thickness(v_nut_hole(type)))]);
 	}
 }
 
 module washer(type=washer_M3, $fn=0){
 	//makes a washer
-	color([150/255, 150/255, 150/255, 0.7]) render(convexity = 4) cylinder(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=$fn);
+	color([150/255, 150/255, 150/255, 0.7]) rotate([0,0, 180/(($fn>0) ? $fn : poly_sides(washer_outer_dia(type)))])
+	render(convexity = 4) cylinder_poly(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=$fn);
 }
 
 module washer_hole(type=washer_M3, $fn=0){
@@ -134,7 +136,7 @@ module washer_hole(type=washer_M3, $fn=0){
 	//echo (v_washer_hole(type, $fn)[1]);
 	//washer = [ ,(washer_outer_dia(type)/cos(180/(($fn>0) ? $fn : 0.01)))
 	//echo (washer_outer_dia_hole(type, $fn));
-	rotate([0,0, 180/$fn]) washer(type=v_washer_hole(type=type, $fn=$fn), $fn=$fn);
+	washer(type=v_washer_hole(type=type, $fn=$fn), $fn=$fn);
 }
 
 // Screw parameters
@@ -366,7 +368,7 @@ nut_jam_inch_5_16 = [ 5/16,  1/2, 3/16, 25.4];
 nut_jam_inch_3_8 =  [  3/8, 9/16, 7/32, 25.4];
 nut_jam_inch_1_2 =  [  1/2,  3/4, 5/16, 25.4];
 
-//screw_hole(type=screw_M3_socket_head, head_drop=0);
+//screw_hole(type=screw_M3_socket_head, head_drop=3, $fn=8);
 //nut();
 //washer_hole($fn=8);
 //washer_hole($fn=4);

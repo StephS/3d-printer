@@ -19,7 +19,7 @@ module i3_belt_clamp() {
 			
 			translate([0, (belt[2]+0.1)/2, y_belt_center]) {
 				for (i = [0 : 35/belt[0]-1+((35%belt[0])/(35%belt[0]+1))]) {
-					translate([1+i*belt[0], 0, 0]) cube([belt[0]*belt[1], (belt[2]+0.1), belt_width+1], center = true);
+					translate([(belt[0]*belt[1])/2+i*belt[0], 0, 0]) cube([belt[0]*belt[1], (belt[2]+0.1), belt_width+1], center = true);
 				}
 			}
 		}
@@ -39,7 +39,7 @@ module i2_belt_clamp() {
 			
 			translate([-5, (belt[2]+0.1)/2, (belt_width+1)/2+(y_belt_center-(belt_width+1)/2)]) {
 				for (i = [0 : 12/belt[0]-1+((12%belt[0])/(12%belt[0]+1))]) {
-					translate([1+i*belt[0], 0, 0]) cube([belt[0]*belt[1], (belt[2]+0.1), (belt_width+1)], center = true);
+					translate([(belt[0]*belt[1])/2+i*belt[0], 0, 0]) cube([belt[0]*belt[1], (belt[2]+0.1), (belt_width+1)], center = true);
 				}
 			}
 		}

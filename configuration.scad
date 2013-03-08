@@ -10,7 +10,7 @@
 // BY UN-COMMENTING IT
 
 // functions
-include <inc/functions.scad>
+include <inc/functions.scad>;
 include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
 include <inc/conf_extrusion.scad>;

@@ -48,7 +48,7 @@ module x_carriage(){
                 translate([6.5,-10.5,0]) cube_fillet([12, 6.5, bushing_carriage_len], radius=2);
 
                 //reduce springiness
-                #translate([9,6*single_wall_width+1,9]) cube([xaxis_rod_distance - 18, 4, 12]);
+                translate([9,6*single_wall_width+1,0]) cube([xaxis_rod_distance - 18, 5, bushing_carriage_len]);
 
                 //space around screws
                 translate([20,0,carriage_hole_to_side]) {
@@ -85,7 +85,7 @@ module x_carriage(){
                         intersection() {
                             for (i = [0 : x_beltclamp_space / belt[0]])
                             {
-                                translate([-8.5, 0, carriage_l - i * belt[0]]) cube([2, 10, belt[0]*belt[1]], center = true);
+                                translate([-8.5, 0, (belt[0]*belt[1])/2+ carriage_l - i * belt[0]]) cube([belt[2]*2+0.1, 10, belt[0]*belt[1]], center = true);
                             }
                             translate([0, 0, carriage_l/2]) cube([20, 10, carriage_l], center = true);
                         }
@@ -104,21 +104,21 @@ module x_carriage(){
             }
             // extruder mounts
 
-            translate([20,-2,carriage_hole_to_side]) {
-                rotate([90,0,0]) cylinder(r=1.8, h=22, center=true);
-                translate([0,9,0]) rotate([90,60,0]) cylinder(r=3.4, h=5, $fn=6, center=true);
+            translate([20,-1,carriage_hole_to_side]) {
+                rotate([90,0,0]) translate([0,0,-11]) screw_hole(type=screw_M3_socket_head, h=20.5, $fn=8);
+                translate([0,11+0.01,0]) rotate([90,60,0]) nut_hole(type=nut_M3, h=13-10+nut_thickness(v_nut_hole(nut_M3)));
             }
-            translate([20,-2,carriage_hole_to_side+30]) {
-                rotate([90,0,0]) cylinder(r=1.8, h=22, center=true);
-                translate([0,9,0]) rotate([90,60,0]) cylinder(r=3.4, h=5, $fn=6, center=true);
+            translate([20,-1,carriage_hole_to_side+30]) {
+                rotate([90,0,0]) translate([0,0,-11]) screw_hole(type=screw_M3_socket_head, h=20.5, $fn=8);
+                translate([0,11+0.01,0]) rotate([90,60,0]) nut_hole(type=nut_M3, h=13-10+nut_thickness(v_nut_hole(nut_M3)));
             }
-            translate([20,-2,carriage_hole_to_side+30+20]) {
-                rotate([90,0,0]) cylinder(r=1.8, h=22, center=true);
-                translate([0,9,0]) rotate([90,60,0]) cylinder(r=3.4, h=5, $fn=6, center=true);
+            translate([20,-1,carriage_hole_to_side+30+20]) {
+                rotate([90,0,0]) translate([0,0,-11]) screw_hole(type=screw_M3_socket_head, h=20.5, $fn=8);
+                translate([0,11+0.01,0]) rotate([90,60,0]) nut_hole(type=nut_M3, h=13-10+nut_thickness(v_nut_hole(nut_M3)));
             }
-            translate([20,-2,carriage_hole_to_side+30+20+30]) {
-                rotate([90,0,0]) cylinder(r=1.8, h=22, center=true);
-                translate([0,9,0]) rotate([90,60,0]) cylinder(r=3.4, h=5, $fn=6, center=true);
+            translate([20,-1,carriage_hole_to_side+30+20+30]) {
+                rotate([90,0,0]) translate([0,0,-11]) screw_hole(type=screw_M3_socket_head, h=20.5, $fn=8);
+                translate([0,11+0.01,0]) rotate([90,60,0]) nut_hole(type=nut_M3, h=13-10+nut_thickness(v_nut_hole(nut_M3)));
             }
 
             // belt clamp mounts
@@ -130,9 +130,11 @@ module x_carriage(){
 }
 
 module belt_clamp_nut() {
-    translate([0,0,m3_nut_diameter/-2]) cube([2.5,m3_nut_diameter_bigger,m3_nut_diameter+0.3]);
-    translate([-5,m3_nut_diameter_bigger/2,0]){
-        rotate([0, 90,0]) cylinder(r=3.5/2,h=20,$fn=32, center=true);
+	translate([0,nut_outer_dia(v_nut_hole(nut_M3))/2,0]) rotate([0, -90, 0]) rotate([0, 0, -90])
+		nut_slot_hole(type=nut_M3, h=nut_outer_dia(v_nut_hole(nut_M3))/2); //cube([2.5,m3_nut_diameter_bigger,m3_nut_diameter+0.3]);
+    //#translate([0,0,m3_nut_diameter/-2]) cube([2.5,m3_nut_diameter_bigger,m3_nut_diameter+0.3]);
+    translate([-6,nut_outer_dia(v_nut_hole(nut_M3))/2,0]){
+        rotate([0, 90,0]) screw_hole(type=screw_M3_socket_head, h=10, $fn=8); //cylinder(r=3.5/2,h=20,$fn=32, center=true);
         //rotate([0,-90,0]) cylinder(r=3.5/2,h=30,$fn=32);
     }
 }
@@ -140,8 +142,8 @@ module x_beltclamp(){
     translate([1,0,0]) difference(){
         cube_fillet([x_beltclamp_len, 17, 7]);
         translate([carriage_l-32-30,m3_nut_diameter_bigger,0]/2){
-            cylinder(r=3.4/2,h=30);
-            translate([0,0,7]) mirror([0,0,1]) screw(slant=false,r=1.7,head_drop=3);
+            //cylinder(r=3.4/2,h=30);
+            translate([0,0,7]) mirror([0,0,1]) screw_hole(type=screw_M3_socket_head, h=10, head_drop=3);
 
         }
     }

@@ -6,6 +6,7 @@
 // Vlnofka <>
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
+
 include <nuts_screws.scad>;
 
 module chamfer(x=10,y=10,z=10) {
@@ -23,6 +24,7 @@ module chamfer(x=10,y=10,z=10) {
        );
 }
 
+/*
 module nut(d,h,horizontal=true){
     cornerdiameter =  (d / 2) / cos (180 / 6);
     cylinder(h = h, r = cornerdiameter, $fn = 6);
@@ -32,17 +34,18 @@ module nut(d,h,horizontal=true){
         }
     }
 }
+*/
 
+function poly_sides(d) = max(round(2 * d),3)+1;
 // Based on nophead research
-module polyhole(d, h, center=false) {
-    n = max(round(2 * d),3);
-    rotate([0,0,180])
-        cylinder(h = h, r = (d / 2) / cos (180 / n), $fn = n, center=center);
+module polyhole(d, d1, d2, h, center=false, $fn=0) {
+    n = max((($fn>0) ? $fn : poly_sides(d)), (($fn>0) ? $fn : poly_sides(d1)), (($fn>0) ? $fn : poly_sides(d2)));
+    cylinder(h = h, r = (d / 2), r1 = (d1 / 2), r2 = (d2 / 2), $fn = n, center=center);
 }
 
 // make it interchangeable between this and cylinder
-module cylinder_poly(r, h, center=false){
-    polyhole(d=r*2, h=h, center=center);
+module cylinder_poly(r, r1, r2, h, center=false, $fn=0){
+    polyhole(d=r*2, d1=r1*2, d2=r2*2, h=h, center=center, $fn=$fn);
 }
 
 module fillet(radius, height=100, $fn=0) {
@@ -142,7 +145,7 @@ module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5){
 				}
 
                 // motor screw holes
-				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness);
+				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, $fn=0);
 						
 				// center hole
 				translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);
