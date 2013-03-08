@@ -75,14 +75,14 @@ module x_end_base(vfillet=[3, 3, 3, 3], thru=true, len=40){
         }
         translate([0, 0, 4 - bushing_xy[0]]) {  // m5 nut insert
                     translate([0, 17, -10]) rotate([0,0,45]){
-                        cylinder(h = 40, r=2.75);
+                        cylinder_poly(h = 40, r=2.65);
                         //nut slid in
-                        translate([3, 0, 14]) cube([9.2*2, 9.2*sqrt(3/4)+0.4, nut_thickness(v_nut_hole(nut_M5))], center = true);
+                        translate([0, 0, 12])  nut_slot_hole(type=nut_M5, h=9.2);
                     }
         }
     }
     //threaded rod
-    translate([0, 17, 0]) %cylinder(h = 70, r=2.5+0.2);
+    //translate([0, 17, 0]) %cylinder(h = 70, r=2.5+0.2);
 }
 
 module x_end_idler(){
@@ -118,3 +118,4 @@ if (x_idler_bearing[3] > 0) {
 
 translate([-40, 0, 0]) rotate([0, 0, -90]) x_end_idler(thru=true);
 translate([30, 0, 0]) rotate([0, 0, -90]) x_end_motor();
+//x_end_base([3, 3, 0, 0], thru=false);

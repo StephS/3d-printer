@@ -108,7 +108,7 @@ module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, p
 
 module nut(type=nut_M3){
 	//makes a nut
-	color([150/255, 150/255, 150/255, 0.7]) render(convexity = 12) cylinder(h=nut_thickness(type), r=nut_outer_dia(type)/2, $fn=6);
+	cylinder(h=nut_thickness(type), r=nut_outer_dia(type)/2, $fn=6);
 }
 
 module nut_hole(type=nut_M3){
@@ -116,9 +116,17 @@ module nut_hole(type=nut_M3){
 	color([150/255, 150/255, 150/255, 1]) nut(type=v_nut_hole(type));
 }
 
+module nut_slot_hole(type=nut_M3, h=0){
+	//makes a nut slot
+	union() {
+		nut(type=v_nut_hole(type));
+		translate([0, -(nut_flat(v_nut_hole(type)))/2, 0]) cube([h, (nut_flat(v_nut_hole(type))), (nut_thickness(v_nut_hole(type)))]);
+	}
+}
+
 module washer(type=washer_M3, $fn=12){
 	//makes a washer
-	color([150/255, 150/255, 150/255, 0.7]) render() cylinder(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=$fn);
+	color([150/255, 150/255, 150/255, 0.7]) render(convexity = 4) cylinder(h=washer_thickness(type), r=washer_outer_dia(type)/2, $fn=$fn);
 }
 
 module washer_hole(type=washer_M3){
@@ -358,3 +366,5 @@ nut_jam_inch_1_2 =  [  1/2,  3/4, 5/16, 25.4];
 //screw_hole(type=screw_M3_socket_head, head_drop=0);
 //nut();
 //washer();
+
+//rotate([0,0, -135]) nut_slot_hole(h=(nut_outer_dia(v_nut_hole(nut_M3)))/2);
