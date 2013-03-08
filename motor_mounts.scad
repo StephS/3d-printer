@@ -56,9 +56,9 @@ module y_motor_mount() {
 			% translate ([0, 0, pulley_height_from_motor]) belt_pulley();
 		}
 		difference() {
-			translate([(support_wall_thickness+screw_head_height(v_screw_hole(ex_screw))+1)/2,0,-extrusion[0]/2+motor_mount_thickness/2]) cube([support_wall_thickness+screw_head_height(v_screw_hole(ex_screw))+1,stepper_motor_padded,motor_mount_thickness+extrusion[0]], center = true);
+			translate([(support_wall_thickness+screw_head_height(v_screw_hole(ex_screw, $fn=8))+1)/2,0,-extrusion[0]/2+motor_mount_thickness/2]) cube([support_wall_thickness+screw_head_height(v_screw_hole(ex_screw, $fn=8))+1,stepper_motor_padded,motor_mount_thickness+extrusion[0]], center = true);
 			
-			translate([support_wall_thickness+(screw_head_height(v_screw_hole(ex_screw))+1),0,-extrusion[0]/2]) rotate(a=[0,-90,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, head_drop=screw_head_height(v_screw_hole(ex_screw))+1, $fn=8);
+			translate([support_wall_thickness+(screw_head_height(v_screw_hole(ex_screw, $fn=8))+1),0,-extrusion[0]/2]) rotate(a=[0,-90,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, head_drop=screw_head_height(v_screw_hole(ex_screw, $fn=8))+1, $fn=8);
 		}
 		difference() {
 			translate ([(stepper_motor_padded+support_wall_thickness+screw_head_height(v_screw_hole(ex_screw))+1)/2,support_wall_thickness/2+stepper_motor_padded/2,-extrusion[0]/2+motor_mount_thickness/2]) cube([stepper_motor_padded+support_wall_thickness+screw_head_height(v_screw_hole(ex_screw))+1,support_wall_thickness,motor_mount_thickness+extrusion[0]], center = true);
