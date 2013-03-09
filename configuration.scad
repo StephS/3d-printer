@@ -116,7 +116,7 @@ bearing_R4RS = [15.875, 4.9784, 6.35, 0];
 // Size for 6mm 626RS bearing
 bearing_626RS = [19, 6, 6, 0];
 
-y_idler_washer_thickness=1.5875;
+//y_idler_washer=washer_inch_1_4;
 
 x_idler_bearing = bearing_624_double;
 y_idler_bearing = bearing_R4RS;
@@ -152,6 +152,7 @@ y_clamp_separation=100;
 
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+7;
+
 y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed

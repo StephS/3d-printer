@@ -24,19 +24,14 @@ module chamfer(x=10,y=10,z=10) {
        );
 }
 
-/*
-module nut(d,h,horizontal=true){
-    cornerdiameter =  (d / 2) / cos (180 / 6);
-    cylinder(h = h, r = cornerdiameter, $fn = 6);
-    if(horizontal){
-        for(i = [1:6]){
-            rotate([0,0,60*i]) translate([-cornerdiameter-0.2,0,0]) rotate([0,0,-45]) cube([2,2,h]);
-        }
-    }
-}
-*/
+// This will size an outer diameter to fit inside dia with $fn sides
+// use this to set the diameter before passing to polyhole
+function hole_fit( dia=0,$fn=0) = dia/cos(180/(($fn>0) ? $fn : 0.01));
 
+// This determines the number of sides of a hole that is printable
+// I added +1 because nobody wants to print a triangle. (plus it looks nicer, havn't tested printability yet.)
 function poly_sides(d) = max(round(2 * d),3)+1;
+
 // Based on nophead research
 module polyhole(d, d1, d2, h, center=false, $fn=0) {
     n = max((($fn>0) ? $fn : poly_sides(d)), (($fn>0) ? $fn : poly_sides(d1)), (($fn>0) ? $fn : poly_sides(d2)));
@@ -171,14 +166,21 @@ module belt_pulley()
 //radius of the idler assembly (to surface that touches belt, ignoring guide walls)
 function idler_assy_r_inner(idler_bearing) = (idler_bearing[0] / 2) + 4 * single_wall_width * idler_bearing[3];
 //radius of the idler assembly (to smooth side of belt)
-function idler_assy_r_outer(idler_bearing) = (idler_bearing[0] / 2) + (idler_bearing[3] ? (5.5 * idler_bearing[3]) : 3);
+function idler_assy_r_outer(idler_bearing) = (idler_bearing[0] / 2) + (idler_bearing[3] ? (5.5 * idler_bearing[3]) : belt[3]+1);
 
+module idler(idler_bearing=[22, 7, 8, 1], center=false) {
+	difference(){
+		cylinder(r=idler_bearing[0]/2,h=idler_bearing[1], center = center);
+		cylinder(r=idler_bearing[2]/2,h=idler_bearing[1]+1, center = center);
+	}
+	
+}
 
 module idler_assy(idler_bearing = [22, 7, 8, 1], idler_width=x_idler_width) {
 
-    translate([0,0,-1]) cylinder(h = 120, r=idler_bearing[2]/2 + 1, $fn=7, center=true);
+    translate([0,0,0]) rod_hole(h=120, d=hole_fit(idler_bearing[2], 8)+0.15, $fn=8, center=true); // cylinder(h = 120, r=idler_bearing[2]/2 + 1, $fn=7, center=true);
     //bearing shadow
-    %cylinder(h = idler_bearing[1], r=idler_bearing[0]/2, center=true);
-
+    %idler(idler_bearing, center=true)
+    // cutout around the idler
     cylinder(h = idler_width + 1, r=idler_assy_r_outer(idler_bearing), center=true);
 }
