@@ -56,6 +56,8 @@ motor_mount_thickness=10;
 
 smooth_rod_diameter=8;
 
+
+
 // extrusion parameters
 // 10 series 8020 (inch) conf_ex_8020_10s
 // 15 series 8020 (inch) conf_ex_8020_15s
@@ -89,6 +91,9 @@ bushing_z = conf_b_lm8uu;
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
 bushing_carriage = bushing_xy;
+
+//z_smooth_rod_location=(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2);
+//carriage_mount = -bushing_xy[0]+0.5-z_smooth_rod_location;
 
 // LM8UU dimensions
 LM8UU_dia = 15.2;

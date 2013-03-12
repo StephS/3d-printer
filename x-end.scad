@@ -116,6 +116,8 @@ if (x_idler_bearing[3] > 0) {
     }
 }
 
+
 translate([-40, 0, 0]) rotate([0, 0, -90]) x_end_idler(thru=true);
 translate([30, 0, 0]) rotate([0, 0, -90]) x_end_motor();
+
 //x_end_base([3, 3, 0, 0], thru=false);
