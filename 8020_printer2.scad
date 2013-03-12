@@ -24,9 +24,9 @@ translate(v = [-(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extr
 translate(v = [(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extrusion[0]/2]) extrusion(length= extrusion[0]);
 
 brace_offset=extrusion[0]/sin(45);
-brace_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-7)-extrusion[0]*2;
+brace_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)))-extrusion[0]*2;
 
-translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-7), 0]) {
+translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25))), 0]) {
 	// Z vertical bars
 	translate(v = [top_x_width/2 - extrusion[0]/2,0,z_height/2 + extrusion[0]]) extrusion(length= z_height);
 	translate(v = [-(top_x_width/2 - extrusion[0]/2),0,z_height/2 + extrusion[0]]) extrusion(length= z_height);
@@ -75,7 +75,7 @@ translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepp
 			translate([+4, 0, xaxis_rod_distance+6]) rotate([0, -90, 0]) color("DimGray") cylinder(h = x_width+100, r=bushing_xy[0], $fn=30, center=true);
 			//X axis carriage
 			translate([0, 0, 6]) rotate([0,90,0]) x_carriage();
-			//translate([-(50.5-(7.4444+32.0111+0.25))+3.5, -10.5, 0]) rotate([90,0,0]) wade();
+			//translate([-(50.5-(7.4444+32.0111+0.25))+3.5, -10.5-38, 0]) rotate([90,0,180]) wade();
 		}
 	}
 }
