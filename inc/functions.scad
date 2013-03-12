@@ -14,10 +14,10 @@ module chamfer(x=10,y=10,z=10) {
  linear_extrude(height = y, center = true, convexity = 2, twist = 0)
  polygon(points = [
 [-1.00,-1.00]
-,[-1.00,x]
+,[-1.00,x-1.00]
 ,[0.00,x]
 ,[z,0.00]
-,[z,-1.00]
+,[z-1.00,-1.00]
 ]
 ,paths = [
 [0,1,2,3,4]]
@@ -102,12 +102,12 @@ module cube_fillet_inside(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bo
 }
 
 
-module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, $fn=24){
+module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, $fn=24, hole_support=false){
     for (i=[0:3]) {
         if (places[i] == 1) {
             rotate([0, 0, 90*i]) translate([size, size, 0]) {
                 if (holes) {
-                    rotate([0, 0, -90*i]) screw_hole(type=screw_M3_socket_head, head_drop=head_drop, $fn=$fn, h=h);
+                    rotate([0, 0, -90*i]) screw_hole(type=screw_M3_socket_head, head_drop=head_drop, $fn=$fn, h=h, hole_support=hole_support);
                 } else {
                     rotate([0, 0, -90*i]) cylinder(h=h, r=5.5, $fn=$fn);
                 }
@@ -129,7 +129,7 @@ module nema17_motor(height=42, color=true) {
 	}
 }
 
-module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5){
+module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5, hole_support=false){
 	difference(){
 		union(){
             // Motor holding part
@@ -140,7 +140,7 @@ module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5){
 				}
 
                 // motor screw holes
-				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, $fn=0);
+				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, $fn=0, hole_support=hole_support);
 						
 				// center hole
 				translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);

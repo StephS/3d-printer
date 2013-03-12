@@ -4,6 +4,9 @@
 // Stephanie Shaltes
 include <functions.scad>;
 
+// should pull this from configuration.
+layer_height = 0.3;
+
 // Allowances for tolerance
 screw_hole_allowance = 0.15;
 screw_head_allowance = 0.5;
@@ -69,7 +72,7 @@ module screw(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=f
 	}
 }
 
-module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=0, hole=false ){
+module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=false, $fn=0, hole=false, hole_support=false ){
     //makes screw with head
     screw=v_screw_hole(type, head_allowance=((screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance), $fn=$fn);
     
@@ -79,23 +82,26 @@ module screw_hole(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, p
 	head_height = ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw) : head_drop);
 	head_drop1= ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw)+head_drop : head_drop);
 	
-    rotate([0,0, 180/(($fn>0) ? $fn : poly_sides(screw_dia(screw)))]) union() {
-	    translate([0, 0, head_drop1]) {
-			translate([0, 0, -0.01]) {
-			    if (poly) {
-			        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
-			    } else {
-			        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
-			    }
-			}
-		    render(convexity = 4) 
-		    if (head_height>0) {
-			    translate([0, 0, -head_height-0.01]) {
-					cylinder_poly(h=head_height+0.02, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
+    rotate([0,0, 180/(($fn>0) ? $fn : poly_sides(screw_dia(screw)))]) translate([0, 0, head_drop1]) {
+	     difference() {
+	     	union() {
+				translate([0, 0, -0.01]) {
+				    if (poly) {
+				        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
+				    } else {
+				        cylinder_poly(h=h+0.02, r=screw_dia(screw)/2, $fn=$fn);
+				    }
 				}
-				translate([0, 0, -head_drop1])
-				cylinder_poly(h=head_drop1-head_height, r=head_top_dia/2, $fn=$fn);
+		 	   render(convexity = 4) 
+		 	   if (head_height>0) {
+				    translate([0, 0, -head_height-0.01]) {
+						cylinder_poly(h=head_height+0.02, r2=head_bottom_dia/2, r1=head_top_dia/2, $fn=$fn);
+					}
+					translate([0, 0, -head_drop1])
+					cylinder_poly(h=head_drop1-head_height, r=head_top_dia/2, $fn=$fn);
+				}
 			}
+			if (hole_support) translate([0, 0, -0.01]) cylinder_poly(h=layer_height+0.01, r=head_top_dia/2, $fn=$fn);
 		}
 	}
 }
@@ -364,7 +370,7 @@ nut_jam_inch_5_16 = [ 5/16,  1/2, 3/16, 25.4];
 nut_jam_inch_3_8 =  [  3/8, 9/16, 7/32, 25.4];
 nut_jam_inch_1_2 =  [  1/2,  3/4, 5/16, 25.4];
 
-//screw_hole(type=screw_M3_socket_head, head_drop=3, $fn=8);
+//screw_hole(type=screw_M3_socket_head, head_drop=3, $fn=8, hole_support=true);
 //nut();
 //washer_hole($fn=8);
 //washer_hole($fn=4);

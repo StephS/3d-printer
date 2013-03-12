@@ -5,6 +5,7 @@ use <extrusion.scad>
 use <x-end.scad>
 use <x-carriage.scad>
 use <bushing.scad>
+use <extrusion_bracket.scad>
 
 // Y length bars
 translate(v = [x_width/2 - extrusion[0]/2,0,extrusion[0]*1.5]) rotate(a=[90,0,0]) extrusion(length= y_length);
@@ -42,6 +43,16 @@ echo("Z axis smooth rod length = ", z_height);
 // z axis screw
 translate([x_width/2 +(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2+extrusion[0]*2]) color("DimGray") cylinder(r=5/2,h=z_height, center = true);
 mirror([1,0,0]) translate([x_width/2 +(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2+extrusion[0]*2]) color("DimGray") cylinder(r=5/2,h=z_height, center = true);
+
+translate(v = [top_x_width/2,extrusion[0]/2,z_height/2 + extrusion[0]*1.5-support_wall_thickness]) rotate(a=[90,0,90]) top_brace_bracket();
+translate(v = [x_width/2, extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-extrusion[0]/sin(45),extrusion[0]*2]) rotate(a=[0,0,90]) bottom_brace_bracket();
+translate(v = [top_x_width/2-extrusion[0]/2,extrusion[0]/2+support_wall_thickness,extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2 + extrusion[0]*2]) rotate(a=[-45-90,0,0]) translate(v = [0, -extrusion[0]/2 ,(extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2)/sin(45)/2]) extrusion(length= (extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2)/sin(45));
+
+mirror([1,0,0]) {
+	translate(v = [top_x_width/2,extrusion[0]/2,z_height/2 + extrusion[0]*1.5-support_wall_thickness]) rotate(a=[90,0,90]) top_brace_bracket();
+	translate(v = [x_width/2, extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-extrusion[0]/sin(45),extrusion[0]*2]) rotate(a=[0,0,90]) bottom_brace_bracket();
+	translate(v = [top_x_width/2-extrusion[0]/2,extrusion[0]/2+support_wall_thickness,extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2 + extrusion[0]*2]) rotate(a=[-45-90,0,0]) translate(v = [0, -extrusion[0]/2 ,(extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2)/sin(45)/2]) extrusion(length= (extrusion[0]*2-extrusion[0]/sin(45)+z_height/2-support_wall_thickness-extrusion[0]/2)/sin(45));
+}
 
 // X axis ends
 translate([0, -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2+extrusion[0]*2]) {

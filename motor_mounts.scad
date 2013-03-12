@@ -48,7 +48,7 @@ module y_motor_mount() {
 	union() {
 		translate ([stepper_motor_padded/2+support_wall_thickness+screw_head_height(v_screw_hole(ex_screw))+1,0,0]) {
 			difference() {
-				motor_plate(thickness=motor_mount_thickness, width=stepper_motor_padded);
+				motor_plate(thickness=motor_mount_thickness, width=stepper_motor_padded, hole_support=true);
 				translate([stepper_motor_padded/2-stepper_motor_padded/4,0,motor_mount_thickness/2+pulley_height_from_motor]) rotate(a=[0,90,0]) rotate(a=[0,0,22.5]) cylinder(r=pulley[4]/2+1,h=stepper_motor_padded/2+1, center = true, $fn=8);
 				translate([stepper_motor_padded/2-stepper_motor_padded/4,0,motor_mount_thickness-0.5]) rotate(a=[0,90,0]) rotate(a=[0,0,22.5]) cylinder(r=pulley[4]/2+1,h=stepper_motor_padded/2+1, center = true, $fn=8);
 			}
@@ -80,8 +80,6 @@ translate([stepper_motor_padded/2, ((extrusion[0]*2) > stepper_motor_padded ? (e
 translate([extrusion[0]+2, 0, 0]) z_motor_mount();
 translate([-extrusion[0]-2, 0, 0]) mirror([1,0,0]) z_motor_mount();
 
-//nema17(places=[1,1,1,1], h=10);
-//translate([0, 0, 10]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=5, h=10);
 
 
 
