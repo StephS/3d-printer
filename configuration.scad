@@ -76,7 +76,7 @@ y_length = y_length_in * inch;
 x_width = x_width_in * inch;
 z_height = z_height_in * inch;
 top_x_width = top_x_width_in * inch + (extrusion[0]*2);
-echo ("top and bottom extrusion lengths = ", top_x_width/inch);
+//echo ("top and bottom extrusion lengths = ", top_x_width/inch);
 
 // Choose screws configuration ***************************************
 y_bearing_screw = screw_M4_flat_head;
