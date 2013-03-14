@@ -37,8 +37,9 @@ belt_width = 7;
 // Select your pulley type ******************************************************
 // GT2-3mm 17 groove pulley conf_pulley_17_GT2_3mm
 // GT2 36 groove pulley conf_pulley_36_GT2
-
+// GT2 40 groove pulley conf_pulley_40_GT2
 pulley = conf_pulley_17_GT2_3mm;
+
 // the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
 pulley_height_from_motor=3;
 
@@ -68,6 +69,7 @@ ex_screw=screw_8020_1_4_flange_head;
 // 20 series 8020 conf_ex_8020_20s
 // 25 series 8020 conf_ex_8020_25s
 // 30 series 8020 conf_ex_8020_30s
+// Misumi 2020 conf_ex_misumi_2020
 extrusion = conf_ex_8020_10s;
 
 // extrusion lengths

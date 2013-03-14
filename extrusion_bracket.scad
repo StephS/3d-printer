@@ -46,12 +46,6 @@ module top_brace_bracket() {
 module print_corner_bracket(length=2) {
 	rotate(a=[0,45+90,0]) translate([-(extrusion[0]*length/2+support_wall_thickness), 0, -(extrusion[0]*length/2+support_wall_thickness)]) corner_bracket(length=length);	
 }
-//translate([0, 0, sin(45)*(extrusion[0]*2+support_wall_thickness*2)]) rotate(a=[0,45+90,0]) corner_bracket();
 
 translate([0,-extrusion[0]/2-4, 0]) print_corner_bracket(length=2);
-//bottom_brace_bracket();
 translate([-4,extrusion[0], 0]) rotate(a=[0,0,90]) top_brace_bracket();
-
-//rotate(a=[90,0,0]) 
-//mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket();
-//rotate(a=[0,0,90]) bottom_brace_bracket();
