@@ -104,7 +104,6 @@ LM8UU_height = LM8UU_dia/2+2;
 echo("Y pulley height", pulley[0] + pulley_height_from_motor);
 echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
 
-
 // Select idler bearing size **************************************************
 // [outer_diameter, width, inner_diameter, uses_guide]
 // 608 [standard skate bearings] with bearing guide
@@ -132,20 +131,6 @@ y_idler_bearing = bearing_R4RS;
 
 use_fillets = 1;
 
-//set to 0 for single plate (affects z axis)
-i_am_box = 1;
-
-//if you do your own plate and can move bottom Z screws 5mm up set this to 0 to
-//get stronger motor mount. Only for i_am_box = 0
-i_want_to_use_single_plate_dxf_and_make_my_z_weaker = 1;
-
-//radius of long threaded rod on Y frame
-//Use 5.4 for M10 or 4.4 for M8
-y_threaded_rod_long_r = 5.4;
-
-// Thickness of the XZ plate board. Leave at 12 for single plate
-board_thickness = 12;
-
 // END of custom settings
 
 // *******************
@@ -164,7 +149,6 @@ y_belt_clamp_hole_distance=18;
 // *******************
 
 // You are not supposed to change this
-board_to_xz_distance = 26;
 xaxis_rod_distance = 45;
 
 //calculated from settings

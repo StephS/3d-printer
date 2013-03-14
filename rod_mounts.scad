@@ -1,3 +1,4 @@
+include <inc/drivetrain.scad>
 include <inc/functions.scad>
 include <configuration.scad>
 
@@ -70,6 +71,6 @@ translate([0, 0, extrusion[0]/2]) {
 
 	// Z rod mounts
 	translate([-rod_mount_distance_from_center-2, -2, 0]) z_rod_mount();
-	translate([rod_mount_distance_from_center+2, -2, 0]) mirror([1,0,0]) z_rod_mount();
+	translate([rod_mount_distance_from_center+2, -2, 0]) z_rod_mount();
 
 }

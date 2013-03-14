@@ -1,4 +1,5 @@
 include <inc/functions.scad>
+include <inc/drivetrain.scad>
 include <configuration.scad>
 
 wall_height=extrusion[0];
@@ -10,13 +11,16 @@ union() {
 		union() {
 			translate([-extrusion[0]/2, -extrusion[0] -support_wall_thickness, motor_mount_thickness/2]) cube_fillet([extrusion[0],extrusion[0]*2,motor_mount_thickness], center = true, vertical = [0, 0, extrusion[0]/2, (extrusion[0]*3 > (extrusion[0]+stepper_motor_padded) ? ((extrusion[0]*3-(extrusion[0]+stepper_motor_padded)) > extrusion[0]/2 ? extrusion[0]/2 : (extrusion[0]*3-(extrusion[0]+stepper_motor_padded))) : 0 )]);
 			translate ([stepper_motor_padded/2,-stepper_motor_padded/2-support_wall_thickness,0]) motor_plate(thickness=motor_mount_thickness, width=stepper_motor_padded, head_drop=screw_head_height(screw_M3_socket_head));
-			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder(r=smooth_rod_diameter/2+4,h=motor_mount_thickness, center = true);
+			difference() {
+				translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder(r=smooth_rod_diameter/2+4,h=motor_mount_thickness, center = true);
+				// we cut out for the center
+				translate ([stepper_motor_padded/2,-stepper_motor_padded/2-support_wall_thickness, motor_mount_thickness/2]) cylinder_slot(r=12,h=motor_mount_thickness+1, center = true);
+			}
 		}
 		translate([-extrusion[0]/2, extrusion[0]/2, motor_mount_thickness]) rotate(a=[180,0,0]) screw_hole(type=ex_screw, h=motor_mount_thickness+1);
 		translate([-extrusion[0]/2, -support_wall_thickness-extrusion[0]*0.5, motor_mount_thickness]) rotate(a=[180,0,0]) screw_hole(type=ex_screw, h=motor_mount_thickness+1);
 		translate([-extrusion[0]/2, -support_wall_thickness-extrusion[0]*1.5, motor_mount_thickness]) rotate(a=[180,0,0]) screw_hole(type=ex_screw, h=motor_mount_thickness+1);
-		// because I'm lazy, we cut out again.
-		translate ([stepper_motor_padded/2,-stepper_motor_padded/2-support_wall_thickness, motor_mount_thickness/2]) cylinder_poly(r=12,h=motor_mount_thickness+1, center = true);
+				
 		// smooth rod hole
 		translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder(r=smooth_rod_diameter/2,h=motor_mount_thickness+1, center = true);
 		translate([0, 0, (extrusion[0]+motor_mount_thickness)/2]) cylinder(r=1.2, h=extrusion[0]+motor_mount_thickness+1, $fn=8, center=true);
@@ -74,13 +78,19 @@ module y_motor_mount() {
 	}
 }
 
+module z_motor_mount_left() {
+	mirror([1,0,0]) z_motor_mount();
+}
 
-translate([stepper_motor_padded/2, ((extrusion[0]*2) > stepper_motor_padded ? (extrusion[0]*2) : stepper_motor_padded )/2 + support_wall_thickness, motor_mount_thickness]) rotate(a=[0,180,0]) y_motor_mount();
+module print_y_motor_mount() {
+	translate ([0,0, motor_mount_thickness]) rotate(a=[0,180,0]) y_motor_mount();
+}
+
+translate([stepper_motor_padded/2, ((extrusion[0]*2) > stepper_motor_padded ? (extrusion[0]*2) : stepper_motor_padded )/2 + support_wall_thickness, 0]) print_y_motor_mount();
+
 translate([extrusion[0]+2, 0, 0]) z_motor_mount();
-translate([-extrusion[0]-2, 0, 0]) mirror([1,0,0]) z_motor_mount();
+translate([-extrusion[0]-2, 0, 0]) z_motor_mount_left();
 
-
-//y_motor_mount();
 
 
 

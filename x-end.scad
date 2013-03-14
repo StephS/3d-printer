@@ -6,6 +6,7 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
 
+include <inc/drivetrain.scad>
 include <configuration.scad>
 use <bushing.scad>
 use <inc/bearing-guide.scad>
