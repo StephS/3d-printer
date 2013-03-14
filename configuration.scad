@@ -43,6 +43,7 @@ pulley = conf_pulley_17_GT2_3mm;
 pulley_height_from_motor=3;
 
 // Stepper motor dimensions
+stepper_motor_height=42;
 stepper_motor_width=42;
 stepper_motor_padded=stepper_motor_width+2;
 
@@ -56,7 +57,10 @@ motor_mount_thickness=10;
 
 smooth_rod_diameter=8;
 
+// Choose screws configuration ***************************************
+y_bearing_screw = screw_M4_flat_head;
 
+ex_screw=screw_8020_1_4_flange_head;
 
 // extrusion parameters
 // 10 series 8020 (inch) conf_ex_8020_10s
@@ -75,13 +79,8 @@ top_x_width_in=x_width_in;
 y_length = y_length_in * inch;
 x_width = x_width_in * inch;
 z_height = z_height_in * inch;
-top_x_width = top_x_width_in * inch + (extrusion[0]*2);
+top_x_width = top_x_width_in * inch + smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
 //echo ("top and bottom extrusion lengths = ", top_x_width/inch);
-
-// Choose screws configuration ***************************************
-y_bearing_screw = screw_M4_flat_head;
-
-ex_screw=screw_8020_1_4_flange_head;
 
 // Choose bearing/bushing configuration ***************************************
 // conf_b_* are in inc/conf_bushing.scad
@@ -205,7 +204,7 @@ z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 // bushing_material_thickness = 0;
 
 ///counted stuff
-m3_nut_diameter_bigger = ((m3_nut_diameter  / 2) / cos (180 / 6))*2;
+//m3_nut_diameter_bigger = ((m3_nut_diameter  / 2) / cos (180 / 6))*2;
 
 
 
@@ -217,6 +216,6 @@ m3_nut_diameter_bigger = ((m3_nut_diameter  / 2) / cos (180 / 6))*2;
 bed_x_size=225;
 bed_y_size=225;
 
-x_smooth_rod_length=460+board_thickness*2; // 492 for 16mm thickness; 484 for 12mm thickness
-y_smooth_rod_length=470;
-z_smooth_rod_length=405;
+//x_smooth_rod_length=460+board_thickness*2; // 492 for 16mm thickness; 484 for 12mm thickness
+//y_smooth_rod_length=470;
+//z_smooth_rod_length=405;

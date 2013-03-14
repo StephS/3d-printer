@@ -141,7 +141,7 @@ module belt_clamp_nut() {
 module x_beltclamp(){
     translate([1,0,0]) difference(){
         cube_fillet([x_beltclamp_len, 17, 7]);
-        translate([carriage_l-32-30,m3_nut_diameter_bigger,0]/2){
+        translate([carriage_l-32-30,nut_outer_dia(v_nut_hole(nut_M3)),0]/2){
             //cylinder(r=3.4/2,h=30);
             translate([0,0,7]) mirror([0,0,1]) screw_hole(type=screw_M3_socket_head, h=10, head_drop=3);
 

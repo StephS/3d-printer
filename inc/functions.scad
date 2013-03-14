@@ -30,7 +30,7 @@ function hole_fit( dia=0,$fn=0) = dia/cos(180/(($fn>0) ? $fn : 0.01));
 
 // This determines the number of sides of a hole that is printable
 // I added +1 because nobody wants to print a triangle. (plus it looks nicer, havn't tested printability yet.)
-function poly_sides(d) = max(round(2 * d),3)+1;
+function poly_sides(d) = (max(round(2 * d),3)+1);
 
 // Based on nophead research
 module polyhole(d, d1, d2, h, center=false, $fn=0) {
@@ -41,6 +41,31 @@ module polyhole(d, d1, d2, h, center=false, $fn=0) {
 // make it interchangeable between this and cylinder
 module cylinder_poly(r, r1, r2, h, center=false, $fn=0){
     polyhole(d=r*2, d1=r1*2, d2=r2*2, h=h, center=center, $fn=$fn);
+}
+
+module cylinder_slot(r=0, r1, r2, h, length=0, center=false, $fn=0) {
+	n = ($fn > 0) ? $fn : max(poly_sides(r*2), poly_sides(r1*2), poly_sides(r2*2));
+	
+	union() {
+		rotate([0,0, 180/n]) cylinder_poly(h=h, r=r, r1=r1, r2=r2, center=center, $fn=n);
+		if (length>0) {
+			translate([((center) ? length/2 : 0),((center) ? 0 : -((r>0) ? r : r1)*cos(180/n)), 0]) trapezoid(cube=[length, ((r>0) ? r*2 : r1*2) *cos(180/n),h], y1=(r1-r2)*cos(180/n), y2=(r1-r2)*cos(180/n), center=center);
+			//cube([length, dia*cos(180/n),h]);
+			translate([length, 0, 0]) rotate([0,0, 180/n]) cylinder_poly(h=h, r=r, r1=r1, r2=r2, center=center, $fn=n);
+		}
+	}
+}
+
+module trapezoid(cube=[10, 10, 10], x1=0, x2=0, y1=0, y2=0, center=false) {
+	translate((center) ? [0,0,0] : [cube[0]/2, cube[1]/2, cube[2]/2] ) {
+		difference() {
+			translate([0, 0 ,0]) cube(cube, center=true);
+			if (x2 >0 ) translate([cube[0]/2, -(cube[1]+0.1)/2, -cube[2]/2]) rotate([0,-atan(x2/cube[2]),0]) cube([x2*cos(atan(x2/cube[2]))+0.1, cube[1]+0.1, sqrt( pow(cube[2], 2) + pow(x2, 2))]);
+			if (x1 >0 ) translate([-cube[0]/2, -(cube[1]+0.1)/2, -cube[2]/2]) rotate([0,atan(x1/cube[2]),0]) translate([ -(x1*cos(atan(x1/cube[2]))+0.1), 0, 0]) cube([x1*cos(atan(x1/cube[2]))+0.1, cube[1]+0.1, sqrt( pow(cube[2], 2) + pow(x1, 2))]);
+			if (y1 >0 ) translate([-(cube[0]+0.1)/2, -cube[1]/2, -cube[2]/2]) rotate([-atan(y1/cube[2]),0,0]) translate([ 0, -(y1*cos(atan(y1/cube[2]))+0.1), 0]) cube([cube[0]+0.1, y1*cos(atan(y1/cube[2]))+0.1, sqrt( pow(cube[2], 2) + pow(y1, 2))]);
+			if (y2 >0 ) translate([-(cube[0]+0.1)/2, cube[1]/2, -cube[2]/2]) rotate([atan(y2/cube[2]),0,0]) cube([cube[0]+0.1, y2*cos(atan(y2/cube[2]))+0.1, sqrt( pow(cube[2], 2) + pow(y2, 2))]);
+		}
+	}
 }
 
 module fillet(radius, height=100, $fn=0) {
@@ -102,14 +127,14 @@ module cube_fillet_inside(size, radius=-1, vertical=[3,3,3,3], top=[0,0,0,0], bo
 }
 
 
-module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, $fn=24, hole_support=false){
+module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, slot_length=0, $fn=24, hole_support=false){
     for (i=[0:3]) {
         if (places[i] == 1) {
             rotate([0, 0, 90*i]) translate([size, size, 0]) {
                 if (holes) {
-                    rotate([0, 0, -90*i]) screw_hole(type=screw_M3_socket_head, head_drop=head_drop, $fn=$fn, h=h, hole_support=hole_support);
+                    rotate([0, 0, -90*i]) screw_hole(type=screw_M3_socket_head, head_drop=head_drop, length=slot_length, $fn=$fn, h=h, hole_support=hole_support);
                 } else {
-                    rotate([0, 0, -90*i]) cylinder(h=h, r=5.5, $fn=$fn);
+                    rotate([0, 0, -90*i]) cylinder_slot(h=h, r=5.5, length=slot_length, $fn=$fn);
                 }
             }
         }
@@ -129,21 +154,21 @@ module nema17_motor(height=42, color=true) {
 	}
 }
 
-module motor_plate(thickness=10, width=stepper_motor_width, head_drop=5, hole_support=false){
+module motor_plate(thickness=10, width=stepper_motor_width, slot_length=0, head_drop=5, hole_support=false){
 	difference(){
 		union(){
             // Motor holding part
             difference(){
 				union(){
-					nema17(places=[1,1,1,1], h=thickness);
+					nema17(places=[1,1,1,1], h=thickness, slot_length=slot_length);
 					translate([0, 0, thickness/2]) cube([width,width,thickness], center = true);
 				}
 
                 // motor screw holes
-				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, $fn=0, hole_support=hole_support);
+				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, slot_length=slot_length, $fn=0, hole_support=hole_support);
 						
 				// center hole
-				translate ([0, 0, thickness/2]) cylinder_poly(r=12,h=thickness+1, center = true);
+				translate ([0, 0, thickness/2]) cylinder_slot(r=12,h=thickness+1, length=slot_length, center = true);
             }
 				translate([0, 0, -42]) nema17_motor();
         }

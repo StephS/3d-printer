@@ -43,41 +43,15 @@ module top_brace_bracket() {
 	}
 }
 
-module bottom_brace_bracket() {
-	difference() {
-		union () {
-			translate([0, 0, 0]) cube([extrusion[0]*2, extrusion[0], support_wall_thickness]);
-			translate([0, 0, 0]) cube([extrusion[0]/sin(45), support_wall_thickness, extrusion[0]/sin(45)]);
-			translate([extrusion[0], 0, 0]) cube([extrusion[0], support_wall_thickness, extrusion[0]/sin(45)/2]);
-			translate([0, 0, extrusion[0]/sin(45)]) rotate(a=[0, 45, 0]) cube_fillet([extrusion[0]*2, support_wall_thickness, extrusion[0]], top=[0,extrusion[0]/2,0,extrusion[0]/3.42], vertical=[0,0,0,0]);
-			
-			translate([extrusion[0]*2-support_wall_thickness, 0, 0]) cube([support_wall_thickness, extrusion[0], extrusion[0]/sin(45)/2]);
-			translate([0, 0, 0]) cube([support_wall_thickness, extrusion[0], extrusion[0]/sin(45)]);
-		}
-		translate([support_wall_thickness/2, extrusion[0], 0]) {
-			translate([0, 0, extrusion[0]/sin(45)]) rotate(a=[0,-90,90]) chamfer(x=extrusion[0]/sin(45)-support_wall_thickness,z=extrusion[0]-support_wall_thickness);
-			translate([extrusion[0]*2-support_wall_thickness, 0, extrusion[0]/sin(45)/2]) rotate(a=[0,-90,90]) chamfer(x=extrusion[0]/sin(45)/2-support_wall_thickness,z=extrusion[0]-support_wall_thickness);
-		}
-		translate([0, 0, extrusion[0]/sin(45)]) rotate(a=[0, 45, 0]) {
-			translate([ extrusion[0]/2, support_wall_thickness, extrusion[0]/2]) rotate(a=[90, 0, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1, $fn=8);
-			translate([ extrusion[0]+extrusion[0]/2, support_wall_thickness, extrusion[0]/2]) rotate(a=[90, 0, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1, $fn=8);
-		}
-		translate([ extrusion[0]/2, extrusion[0]/2, support_wall_thickness]) {
-			rotate(a=[180, 0, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1);
-			translate([ extrusion[0], 0, 0]) rotate(a=[180, 0, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1);
-		}
-		//#translate([extrusion[0]*2, support_wall_thickness/2, extrusion[0]+support_wall_thickness]) rotate(a=[0,-90,0]) chamfer(x=extrusion[0],z=extrusion[0]);
-	}
-}
-
 module print_corner_bracket(length=2) {
 	rotate(a=[0,45+90,0]) translate([-(extrusion[0]*length/2+support_wall_thickness), 0, -(extrusion[0]*length/2+support_wall_thickness)]) corner_bracket(length=length);	
 }
 //translate([0, 0, sin(45)*(extrusion[0]*2+support_wall_thickness*2)]) rotate(a=[0,45+90,0]) corner_bracket();
 
 translate([0,-extrusion[0]/2-4, 0]) print_corner_bracket(length=2);
-bottom_brace_bracket();
+//bottom_brace_bracket();
 translate([-4,extrusion[0], 0]) rotate(a=[0,0,90]) top_brace_bracket();
 
-//rotate(a=[90,0,0]) top_brace_bracket();
+//rotate(a=[90,0,0]) 
+//mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket();
 //rotate(a=[0,0,90]) bottom_brace_bracket();
