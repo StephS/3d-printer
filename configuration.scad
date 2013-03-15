@@ -59,8 +59,9 @@ motor_mount_thickness=10;
 smooth_rod_diameter=8;
 
 // Choose screws configuration ***************************************
+// screw used for the Y idler bearing. make sure it matches the ID of the bearing.
 y_bearing_screw = screw_M4_flat_head;
-
+// screw used to mount parts to the extrusion
 ex_screw=screw_8020_1_4_flange_head;
 
 // extrusion parameters
@@ -73,6 +74,7 @@ ex_screw=screw_8020_1_4_flange_head;
 extrusion = conf_ex_8020_10s;
 
 // extrusion lengths
+// You can delete these and just specify in millimeters below
 y_length_in = 16;
 x_width_in = 12;
 z_height_in = 14;
@@ -173,26 +175,6 @@ z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 // smooth_bar_diameter = 0;
 // smooth_bar_diameter_horizontal = 0;
 
-// Nuts and bolts
-
-// m8_diameter = 0;
-// m8_nut_diameter = 0;
-
-// m4_diameter = 0;
-// m4_nut_diameter = 0;
-
-// m3_diameter = 0;
-// m3_nut_diameter = 0;
-
-// Bushing holder
-
-// bushing_core_diameter = smooth_bar_diameter;
-// bushing_material_thickness = 0;
-
-///counted stuff
-//m3_nut_diameter_bigger = ((m3_nut_diameter  / 2) / cos (180 / 6))*2;
-
-
 
 // These constants define the geometry of the complete-printer.scad
 
@@ -201,7 +183,3 @@ z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 //z_smooth_rod_length=235;
 bed_x_size=225;
 bed_y_size=225;
-
-//x_smooth_rod_length=460+board_thickness*2; // 492 for 16mm thickness; 484 for 12mm thickness
-//y_smooth_rod_length=470;
-//z_smooth_rod_length=405;
