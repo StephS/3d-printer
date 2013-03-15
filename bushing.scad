@@ -5,7 +5,6 @@
 // Václav 'ax' H?la <axtheb@gmail.com>
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
-
 include <configuration.scad>
 
 // ensure that the part length is at least the length of bushing barrel plus add
@@ -179,27 +178,32 @@ module bearing_clamp(conf_b=bushing_xy, h=0){
 }
 
 module bearing_clamp_brick2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
-	difference() {
-	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3)/2,0,h/2]) cube([conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3,w1, h],center=true);
-	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3),((w2)/2),-0.5]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
-	translate([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3),-(w2/2),-0.5]) mirror([0,1,0]) rotate([0,0,90-atan(((w1-w2)/2)/(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3))]) cube([(w1-w2)/2, sqrt( pow((conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))+0.3), 2) + pow((w1-w2)/2, 2)), h+1]);
-	}
+	translate ([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3)))/2.78+0.3,0,h/2])
+	rotate([0,90,0])
+	trapezoid(cube=[h, w1, conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))/1.39+0.3], x1=0, x2=0, y1=(w1-w2)/2, y2=(w1-w2)/2, center=true);
 }
 
 // w1 is outside dimensions, w2 is beveled dimensions
 module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
 	difference() {
+		union() {
 		bearing_clamp_brick2(conf_b,w1,w2,h);
-		
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
+			rotate([90,0,0]) rotate([0,0,180/8]) cylinder(r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.1,$fn=8), r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
+			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.1,$fn=8), r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, 0, h/2])
+			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=w2, $fn=8, center=true);	
+		}
 		//translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
-
+		
 		// nut trap
-		translate([screw_dia(screw_M3_socket_head) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
 			rotate([90,0,0])
 				nut_hole(type=nut_M3);
 	
 		// screw head hole
-		translate([screw_dia(screw_M3_socket_head) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
 			rotate([90,0, 0])
 				screw_hole(type=screw_M3_socket_head, h=w1+2, head_drop=(w1-w2)/2, washer_type=washer_M3, $fn=8);
 
