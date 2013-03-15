@@ -38,23 +38,23 @@ module z_rod_mount(height=stepper_motor_padded/2) {
 module y_idler_mount() {
 	difference() {
 		union() {
-			translate([0, 0, motor_mount_thickness/2]) cube([extrusion[0],screw_head_top_dia(v_screw_hole(ex_screw))+y_idler_bearing[0],motor_mount_thickness], center = true);
+			translate([0, 0, support_wall_thickness/2]) cube([extrusion[0],screw_head_top_dia(v_screw_hole(ex_screw))+y_idler_bearing[0],support_wall_thickness], center = true);
 			
 			//#translate([0, 0, pulley[8]+pulley_height_from_motor-y_idler_bearing[1]/2]) cylinder(r=extrusion[0]/2,h=pulley[8]+pulley_height_from_motor-y_idler_bearing[1], center = true);
-			translate([0, 0, motor_mount_thickness]) {
-				cylinder(r=extrusion[0]/2,h=((pulley[8] + pulley_height_from_motor)-motor_mount_thickness-y_idler_bearing[1]/2)*0.75);
+			translate([0, 0, support_wall_thickness]) {
+				cylinder(r=extrusion[0]/2,h=((pulley[8] + pulley_height_from_motor)-support_wall_thickness-y_idler_bearing[1]/2)-layer_height*2);
 			
-				translate([0, 0, ((pulley[8] + pulley_height_from_motor)-motor_mount_thickness-y_idler_bearing[1]/2)*0.75]) cylinder(r=y_idler_bearing[0]/2.75, h=((pulley[8] + pulley_height_from_motor)-motor_mount_thickness-y_idler_bearing[1]/2)*0.25);
+				translate([0, 0, ((pulley[8] + pulley_height_from_motor)-support_wall_thickness-y_idler_bearing[1]/2)-layer_height*2]) cylinder(r=y_idler_bearing[0]/2.75, h=layer_height*2);
 			}
 			//echo("pulley height from motor", pulley_height_from_motor);
 			//echo("y belt center", y_belt_center-y_idler_bearing[1]/2);
 			
-			translate([0, -y_idler_bearing[0]/2-screw_head_top_dia(v_screw_hole(ex_screw))/2, motor_mount_thickness/2]) cylinder(r=extrusion[0]/2,h=motor_mount_thickness, center = true);
-			translate([0, y_idler_bearing[0]/2+screw_head_top_dia(v_screw_hole(ex_screw))/2, motor_mount_thickness/2]) cylinder(r=extrusion[0]/2,h=motor_mount_thickness, center = true);
+			translate([0, -y_idler_bearing[0]/2-screw_head_top_dia(v_screw_hole(ex_screw))/2, support_wall_thickness/2]) cylinder(r=extrusion[0]/2,h=support_wall_thickness, center = true);
+			translate([0, y_idler_bearing[0]/2+screw_head_top_dia(v_screw_hole(ex_screw))/2, support_wall_thickness/2]) cylinder(r=extrusion[0]/2,h=support_wall_thickness, center = true);
 		}		
 		translate([0, 0, (pulley[8] + pulley_height_from_motor+y_idler_bearing[1]/2)]) rotate([180, 0, 0]) screw_hole(type=ex_screw, h=(pulley[8] + pulley_height_from_motor+y_idler_bearing[1]/2));
-		translate([0, -y_idler_bearing[0]/2-extrusion[0]/2, motor_mount_thickness]) rotate([180, 0, 0]) screw_hole(type=ex_screw,h=motor_mount_thickness+1);
-		translate([0, y_idler_bearing[0]/2+extrusion[0]/2, motor_mount_thickness]) rotate([180, 0, 0]) screw_hole(type=ex_screw,h=motor_mount_thickness+1);
+		translate([0, -y_idler_bearing[0]/2-extrusion[0]/2, support_wall_thickness]) rotate([180, 0, 0]) screw_hole(type=ex_screw,h=support_wall_thickness+1);
+		translate([0, y_idler_bearing[0]/2+extrusion[0]/2, support_wall_thickness]) rotate([180, 0, 0]) screw_hole(type=ex_screw,h=support_wall_thickness+1);
 	}
 	//% translate([0, 0, (pulley[8] + pulley_height_from_motor+y_idler_bearing[1]/2)]) rotate([180, 0, 0]) screw(type=ex_screw, h=(pulley[8] + pulley_height_from_motor+y_idler_bearing[1]/2));
 	% translate([0, 0,(pulley[8]+pulley_height_from_motor)]) idler(y_idler_bearing, center=true);
