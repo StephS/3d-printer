@@ -11,4 +11,4 @@ x-end.scad will give you the x idler and X motor mounts.
 y-belt-holder.scad will give you the Y axis belt clamps.
 x-carriage.scad will give you the X carriage.
 
-Make sure to edit configuration.scad for your belt type, extrusion type, pulley type, bushing type, idler bearing type, and extrusion lengths (it will calculate rod lengths based off this)
+Make sure to edit configuration.scad for your belt type, extrusion type, extrusion mounting screw, pulley type, bushing type, idler bearing type, and extrusion lengths (it will calculate rod lengths based off this)
