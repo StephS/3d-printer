@@ -22,7 +22,7 @@ union() {
 		translate([-extrusion[0]/2, -support_wall_thickness-extrusion[0]*1.5, motor_mount_thickness]) rotate(a=[180,0,0]) screw_hole(type=ex_screw, h=motor_mount_thickness+1);
 				
 		// smooth rod hole
-		translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder(r=smooth_rod_diameter/2,h=motor_mount_thickness+1, center = true);
+		translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder_poly(r=hole_fit(dia=smooth_rod_diameter, $fn=poly_sides(smooth_rod_diameter))/2,h=motor_mount_thickness+1, center = true);
 		translate([0, 0, (extrusion[0]+motor_mount_thickness)/2]) cylinder(r=1.2, h=extrusion[0]+motor_mount_thickness+1, $fn=8, center=true);
 		// alternate mounting
 		// translate([-(z_screw_rod_separation-stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2, motor_mount_thickness/2]) cylinder(r=smooth_rod_diameter/2,h=motor_mount_thickness+1, center = true);

@@ -68,10 +68,10 @@ module x_end_base(vfillet=[3, 3, 3, 3], thru=true, len=40){
         translate([-10 - bushing_xy[0], 0, 0]) {
             if(thru == true){
                 translate([0, -11, 6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.2, 50);
-                translate([0, -11, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.2, 50);
+                translate([0, -11, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2, 50);
             } else {
                 translate([0, -7, 6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.2, 50);
-                translate([0, -7, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.2, 50);
+                translate([0, -7, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2, 50);
             }
         }
         translate([0, 0, 4 - bushing_xy[0]]) {  // m5 nut insert
@@ -103,7 +103,7 @@ module x_end_idler(){
 }
 
 module pushfit_rod(diameter, length){
-    cylinder(h = length, r=diameter/2, $fn=30);
+    cylinder(h = length, r=hole_fit( dia=diameter,$fn=30)/2, $fn=30);
     translate([0, -diameter/4, length/2]) cube([diameter, diameter/2, length], center = true);
 
     translate([0, -diameter/2-1.2, length/2]) cube([diameter, 1, length], center = true);
