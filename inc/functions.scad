@@ -68,10 +68,11 @@ module trapezoid(cube=[10, 10, 10], x1=0, x2=0, y1=0, y2=0, center=false) {
 
 module fillet(radius, height=100, $fn=0) {
     //this creates acutal fillet
+    n = ($fn>0) ? $fn : (ceil(poly_sides(radius*2)/4)*4);
     translate([-radius, -radius, -height/2-0.01])
         difference() {
             cube([radius*2, radius*2, height+0.02]);
-            cylinder(r=radius, h=height+0.02, $fn=$fn);
+            cylinder(r=radius, h=height+0.02, $fn=n);
         }
 }
 
