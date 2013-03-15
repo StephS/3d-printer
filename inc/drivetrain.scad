@@ -70,7 +70,7 @@ function idler_assy_r_outer(idler_bearing) = (idler_bearing[0] / 2) + (idler_bea
 module idler(idler_bearing=[22, 7, 8, 1], center=false) {
 	difference(){
 		cylinder(r=idler_bearing[0]/2,h=idler_bearing[1], center = center);
-		cylinder(r=idler_bearing[2]/2,h=idler_bearing[1]+1, center = center);
+		cylinder_poly(r=idler_bearing[2]/2,h=idler_bearing[1]+1, center = center);
 	}
 	
 }
