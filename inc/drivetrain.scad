@@ -42,7 +42,7 @@ module motor_plate(thickness=10, width=stepper_motor_width, slot_length=0, head_
 				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, slot_length=slot_length, $fn=0, hole_support=hole_support);
 						
 				// center hole
-				translate ([0, 0, thickness/2]) cylinder_slot(r=12,h=thickness+1, length=slot_length, center = true);
+				translate ([0, 0, thickness/2]) cylinder_slot(r=11.5,h=thickness+1, length=slot_length, center = true);
             }
 				translate([0, 0, -42]) nema17_motor();
         }
@@ -77,7 +77,7 @@ module idler(idler_bearing=[22, 7, 8, 1], center=false) {
 
 module idler_assy(idler_bearing = [22, 7, 8, 1], idler_width=x_idler_width) {
 
-    translate([0,0,0]) rod_hole(h=120, d=hole_fit(idler_bearing[2], 8)+0.15, $fn=8, center=true); // cylinder(h = 120, r=idler_bearing[2]/2 + 1, $fn=7, center=true);
+    translate([0,0,0]) rod_hole(h=120, d=idler_bearing[2], $fn=8, center=true);
     //bearing shadow
     %idler(idler_bearing, center=true)
     // cutout around the idler

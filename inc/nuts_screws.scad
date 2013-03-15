@@ -12,6 +12,8 @@ screw_hole_allowance = 0.15;
 screw_head_allowance = 0.5;
 screw_head_allowance_tight = 0.15;
 
+rod_hole_allowance = 0.15;
+
 nut_hole_allowance = 0.15;
 nut_thickness_allowance = 0.15;
 
@@ -108,10 +110,12 @@ module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer
 	}
 }
 
-module rod_hole(d=0, h=0, $fn=0, center=false){
+module rod_hole(d=0, h=0, allowance=rod_hole_allowance, $fn=0, center=false){
 	//makes a rod hole
-	rotate([0,0, 180/(($fn>0) ? $fn : poly_sides(d))])
-	cylinder_poly(h=h, r=d/2, $fn=$fn, center=center);
+	n=(($fn>0) ? $fn : poly_sides(d));
+	dia= hole_fit(d, n) + allowance;
+	rotate([0,0, 180/n])
+	cylinder_poly(h=h, r=dia/2, $fn=n, center=center);
 }
 
 module nut(type=nut_M3, h=0){
