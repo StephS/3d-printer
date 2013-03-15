@@ -5,7 +5,7 @@ include <configuration.scad>
 wall_height=extrusion[0];
 rod_mount_distance_from_center=screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))+smooth_rod_diameter/2+support_wall_thickness;
 
-module y_rod_mount(height=21) {
+module y_rod_mount(height=y_rod_height) {
 	difference() {
 		union() {
 			translate([0, (-support_wall_thickness-height)/2, 0]) cube([smooth_rod_diameter+support_wall_thickness*2,support_wall_thickness+height,extrusion[0]], center = true);
@@ -66,8 +66,12 @@ translate([-rod_mount_distance_from_center-extrusion[0]/2 -4, extrusion[0]/2 + 1
 translate([0, 0, extrusion[0]/2]) {
 	// Y rod mount (print 4)
 	translate([0, 2, 0]) rotate(a=[0,0,180]) y_rod_mount();
-	translate([smooth_rod_diameter+support_wall_thickness*2+screw_head_top_dia(v_screw_hole(ex_screw))+4, 10+support_wall_thickness*2, 0]) rotate(a=[0,0,180]) y_rod_mount();
+	translate([smooth_rod_diameter+support_wall_thickness*2+screw_head_top_dia(v_screw_hole(ex_screw))+4, y_rod_height+support_wall_thickness*2+smooth_rod_diameter/2+2, 0]) rotate(a=[0,0,0]) y_rod_mount();
 
+	translate([0, y_rod_height+support_wall_thickness*2+smooth_rod_diameter/2+2, 0]) {
+		translate([0, 2, 0]) rotate(a=[0,0,180]) y_rod_mount();
+		translate([smooth_rod_diameter+support_wall_thickness*2+screw_head_top_dia(v_screw_hole(ex_screw))+4, y_rod_height+support_wall_thickness*2+smooth_rod_diameter/2+2, 0]) rotate(a=[0,0,0]) y_rod_mount();
+	}
 
 	// Z rod mounts
 	translate([-rod_mount_distance_from_center-2, -2, 0]) z_rod_mount();
