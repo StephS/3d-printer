@@ -7,15 +7,16 @@ use <x-carriage.scad>
 use <bushing.scad>
 use <extrusion_bracket.scad>
 use <extras/gregs-wade-v3.scad>
+use <feet.scad>
 
 brace_offset=(extrusion[0]*2-extrusion[0]/sin(45));
 brace_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)))-extrusion[0]*2;
 
 // feet
-translate(v = [x_width/2 - extrusion[0]/2,y_length/2 + extrusion[0]/2,extrusion[0]/2]) extrusion(length= extrusion[0]);
-translate(v = [-(x_width/2 - extrusion[0]/2),(y_length/2 + extrusion[0]/2),extrusion[0]/2]) extrusion(length= extrusion[0]);
-translate(v = [-(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extrusion[0]/2]) extrusion(length= extrusion[0]);
-translate(v = [(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extrusion[0]/2]) extrusion(length= extrusion[0]);
+translate(v = [x_width/2 - extrusion[0]/2,y_length/2 + extrusion[0]/2,extrusion[0]]) rotate([180,0,0]) feet();
+translate(v = [-(x_width/2 - extrusion[0]/2),(y_length/2 + extrusion[0]/2),extrusion[0]]) rotate([180,0,0]) feet();
+translate(v = [-(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extrusion[0]]) rotate([180,0,0]) feet();
+translate(v = [(x_width/2 - extrusion[0]/2),-(y_length/2 + extrusion[0]/2),extrusion[0]]) rotate([180,0,0]) feet();
 
 translate([0,0, extrusion[0]*2]) {
 	// Y length bars

@@ -41,7 +41,7 @@ belt_width = 7;
 pulley = conf_pulley_17_GT2_3mm;
 
 // the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
-pulley_height_from_motor=3;
+pulley_height_from_motor=4;
 
 // Stepper motor dimensions
 stepper_motor_height=42;
@@ -142,7 +142,7 @@ y_rod_separation=140;
 y_clamp_separation=100;
 
 // this is where the bottom of the Y rod will be.
-y_rod_height=support_wall_thickness+7;
+y_rod_height=support_wall_thickness+8;
 
 y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
 
