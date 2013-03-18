@@ -31,20 +31,19 @@ translate([0,0, extrusion[0]*2]) {
 	translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25))), 0]) {
 		// Z vertical bars
 		translate([x_width/2,0,0]) {
-			translate([-extrusion[0]/2,0,(z_height-extrusion[0])/2]) extrusion(length= z_height-extrusion[0]);
+			translate([-extrusion[0]/2,0,(z_height)/2]) extrusion(length= z_height);
 			
 			// Z motor mount
 			translate(v = [0,-extrusion[0]/2, 0]) z_motor_mount();
 	
 			// z axis smooth rod mount
-			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height -extrusion[0]/2]) z_rod_mount();
+			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height +extrusion[0]/2]) z_rod_mount();
 		
 			// z axis smooth rod
-			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=z_height, center = true);
-			echo("Z axis smooth rod length = ", z_height, " inch=", (z_height)/inch);
-		
+			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, (z_height+extrusion[0])/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=(z_height+extrusion[0]), center = true);
+					
 			// z axis screw
-			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2]) color("DimGray") cylinder(r=5/2,h=z_height, center = true);
+			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, (z_height+extrusion[0])/2]) color("DimGray") cylinder(r=5/2,h=(z_height+extrusion[0]), center = true);
 		
 			// Braces
 			translate(v = [0, extrusion[0]/2,brace_pos-extrusion[0]/2]) rotate(a=[90,0,90]) top_brace_bracket();
@@ -56,7 +55,7 @@ translate([0,0, extrusion[0]*2]) {
 		}
 	
 		//top z bar
-		translate(v = [0,0,z_height -extrusion[0]/2]) rotate(a=[0,90,0]) extrusion(length= top_x_width);
+		translate(v = [0,0,z_height +extrusion[0]/2]) rotate(a=[0,90,0]) extrusion(length= top_x_width);
 		
 		// X axis ends
 		translate([0, -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2]) {
@@ -78,19 +77,19 @@ translate([0,0, extrusion[0]*2]) {
 	mirror([1, 0, 0]) translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25))), 0]) {
 		translate([x_width/2,0,0]) {
 			// Z vertical bar
-			translate([-extrusion[0]/2,0,(z_height-extrusion[0])/2]) extrusion(length= z_height-extrusion[0]);
+			translate([-extrusion[0]/2,0,(z_height)/2]) extrusion(length= z_height);
 			
 			// Z motor mount
 			translate(v = [0,-extrusion[0]/2, 0]) z_motor_mount();
 	
 			// z axis smooth rod mount
-			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height -extrusion[0]/2]) z_rod_mount();
-		
+			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height +extrusion[0]/2]) z_rod_mount();
+				
 			// z axis smooth rod
-			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=z_height, center = true);
-		
+			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, (z_height+extrusion[0])/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=(z_height+extrusion[0]), center = true);
+							
 			// z axis screw
-			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_height/2]) color("DimGray") cylinder(r=5/2,h=z_height, center = true);
+			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, (z_height+extrusion[0])/2]) color("DimGray") cylinder(r=5/2,h=(z_height+extrusion[0]), center = true);
 		
 			// Braces
 			translate(v = [0, extrusion[0]/2,brace_pos-extrusion[0]/2]) rotate(a=[90,0,90]) top_brace_bracket();
@@ -106,7 +105,8 @@ translate([0,0, extrusion[0]*2]) {
 	echo("top X axis extrusion length = ", top_x_width, " inch=", (top_x_width)/inch);
 	echo("X axis smooth rod length = ", x_width+100, " inch=", (x_width+100)/inch);
 	echo("Z axis Brace length = ", (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45), " inch=", (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45)/inch);
-	echo("Z axis extrusion length = ", (z_height-extrusion[0]), " inch=", (z_height-extrusion[0])/inch);
+	echo("Z axis extrusion length = ", (z_height), " inch=", (z_height)/inch);
+	echo("Z axis smooth rod length = ", (z_height+extrusion[0]), " inch=", (z_height+extrusion[0])/inch);
 
 	// Y axis
 	translate(v = [y_rod_separation/2, 0, 0]) {

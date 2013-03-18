@@ -78,7 +78,7 @@ extrusion = conf_ex_8020_10s;
 // You can delete these and just specify in millimeters below
 y_length_in = 16;
 x_width_in = 12;
-z_height_in = 14;
+z_height_in = 13;
 top_x_width_in=x_width_in;
 
 y_length = y_length_in * inch;
