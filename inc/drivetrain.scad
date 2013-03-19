@@ -35,7 +35,7 @@ module motor_plate(thickness=10, width=stepper_motor_width, slot_length=0, verti
             difference(){
 				union(){
 					//nema17(places=[1,1,1,1], h=thickness, slot_length=slot_length);
-					translate([0, 0, thickness/2]) cube_fillet([width,width,thickness], vertical=vertical, center = true);
+					translate([slot_length/2, 0, thickness/2]) cube_fillet([width+slot_length,width,thickness], vertical=vertical, center = true);
 				}
 
                 // motor screw holes
