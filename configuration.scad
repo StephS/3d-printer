@@ -141,11 +141,10 @@ y_clamp_separation=100;
 y_rod_height=support_wall_thickness+10;
 
 // LM8UU dimensions
-LM8UU_dia = 15.2;
-LM8UU_length = 24;
+// LM8UU_length = conf_b[2];
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
-LM8UU_height = LM8UU_dia/2+2;
-y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
+bushing_height = bushing_xy[1]+2;
+y_belt_center=(y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
 y_belt_clamp_hole_distance=18;
@@ -178,8 +177,8 @@ echo("Y axis smooth rod length = ", y_smooth_rod_length, " inch=", y_smooth_rod_
 echo("Z axis smooth rod length = ", z_smooth_rod_length, " inch=", z_smooth_rod_length/inch);
 
 //Check to be sure the pulley doesn't hit the Y bed
-if ((y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
-echo("Distance between bed and Y pulley:", (y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[0] + pulley_height_from_motor));
+if ((y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
+echo("Distance between bed and Y pulley:", (y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor));
 
 // These constants define the geometry of the complete-printer.scad
 
