@@ -78,14 +78,20 @@ extrusion = conf_ex_misumi_2020;
 // You can delete these and just specify in millimeters below
 y_length_in = 16;
 x_width_in = 12;
-z_height_in = 14;
+z_height_in = 13;
 top_x_width_in=x_width_in;
 
 y_length = y_length_in * inch;
 x_width = x_width_in * inch;
 z_height = z_height_in * inch;
 top_x_width = top_x_width_in * inch + smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
-//echo ("top and bottom extrusion lengths = ", top_x_width/inch);
+
+// Smooth rod length is automatically calculated by extrusion length (can do vice-versa)
+// the width of the X axis smooth rod block is 50, we have 2, so add in 100
+x_smooth_rod_length=(x_width+100);
+y_smooth_rod_length=(y_length+extrusion[0]*2);
+z_smooth_rod_length=(z_height+extrusion[0]);
+
 
 // Choose bearing/bushing configuration ***************************************
 // conf_b_* are in inc/conf_bushing.scad
@@ -95,19 +101,6 @@ bushing_z = conf_b_lm8uu;
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
 bushing_carriage = bushing_xy;
-
-//z_smooth_rod_location=(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2);
-//carriage_mount = -bushing_xy[0]+0.5-z_smooth_rod_location;
-
-// LM8UU dimensions
-LM8UU_dia = 15.2;
-LM8UU_length = 24;
-// The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
-LM8UU_height = LM8UU_dia/2+2;
-
-//Check to be sure the pulley doesn't hit the Y bed
-echo("Y pulley height", pulley[0] + pulley_height_from_motor);
-echo("Y bed height", y_rod_height+smooth_rod_diameter/2+LM8UU_height);
 
 // Select idler bearing size **************************************************
 // [outer_diameter, width, inner_diameter, uses_guide]
@@ -147,6 +140,11 @@ y_clamp_separation=100;
 // this is where the bottom of the Y rod will be.
 y_rod_height=support_wall_thickness+10;
 
+// LM8UU dimensions
+LM8UU_dia = 15.2;
+LM8UU_length = 24;
+// The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
+LM8UU_height = LM8UU_dia/2+2;
 y_belt_center=(y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
@@ -166,21 +164,24 @@ y_idler_width = (y_idler_bearing[1] > 7 ? y_idler_bearing[1] : 7) + 2.5 * y_idle
 xy_delta = ((bushing_xy[1] <= 7.7) ? 0 : bushing_xy[1] - 7.7) * 0.9;
 z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 
-// CHANGE ONLY THE STUFF YOU KNOW
-// IT WILL REPLACE DEFAULT SETTING
+// Don't change these calculations. They are for calculating the Brace position.
+brace_offset=(extrusion[0]*2-extrusion[0]/sin(45));
+brace_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)))-extrusion[0]*2;
 
-// RODS
+echo("X axis extrusion length = ", x_width, " inch=", (x_width)/inch);
+echo("top support X axis extrusion length = ", top_x_width, " inch=", (top_x_width)/inch);
+echo("Y axis extrusion length = ", y_length, " inch=", (y_length)/inch);
+echo("Z axis extrusion length = ", z_height, " inch=", (z_height)/inch);
+echo("Z axis Brace length = ", (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45), " inch=", (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45)/inch);
+echo("X axis smooth rod length = ", x_smooth_rod_length, " inch=", x_smooth_rod_length/inch);
+echo("Y axis smooth rod length = ", y_smooth_rod_length, " inch=", y_smooth_rod_length/inch);
+echo("Z axis smooth rod length = ", z_smooth_rod_length, " inch=", z_smooth_rod_length/inch);
 
-// threaded_rod_diameter = 0;
-// threaded_rod_diameter_horizontal = 0;
-// smooth_bar_diameter = 0;
-// smooth_bar_diameter_horizontal = 0;
-
+//Check to be sure the pulley doesn't hit the Y bed
+if ((y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
+echo("Distance between bed and Y pulley:", (y_rod_height+smooth_rod_diameter/2+LM8UU_height)-(pulley[0] + pulley_height_from_motor));
 
 // These constants define the geometry of the complete-printer.scad
 
-//x_smooth_rod_length=325;
-//y_smooth_rod_length=405;
-//z_smooth_rod_length=235;
 bed_x_size=225;
 bed_y_size=225;
