@@ -27,25 +27,31 @@ module x_end_motor(){
                 intersection() {
                     translate([-15, -34, 30]) cube([20, 60, x_box_height], center = true);
                     union() {
-                        translate([-13.75, -14 + z_delta / 2, 24]) cube_fillet([17.5, 14 + z_delta, 55], center = true, vertical=[0, 0, 3, 1.5], top=[0, 3, 6, 3], $fn=16);
+                        translate([-10 - bushing_xy[0]+1/4, -14 + z_delta / 2, 24]) cube_fillet([x_box_width+1/2, 13 + z_delta, 55], center = true, vertical=[0, 0, 3, 1.5], top=[0, 3, 6, 3], $fn=16);
                         translate([-10, -34, 9]) intersection(){
                             translate([-1/2, 0, -5]) cube_fillet([11, 37, 28], center = true, vertical=[0, 0, 0, 0], top=[0, 3, 5, 3]);
                             translate([-12/2, 10, -26]) rotate([45, 0, 0]) cube_fillet([11, 60, 60], radius=2);
                         }
                     }
                 }
-                translate([-16, -32, 30.25]) rotate([90, 0, 0])  rotate([0, 90, 0]) nema17(places=[1, 0, 1, 1], h=11);
+                translate([10- bushing_xy[0]-11, -32, 30.25]) rotate([90, 0, 0])  rotate([0, -90, 0]) motor_plate(thickness=11, head_drop=screw_head_height(screw_M3_socket_head), vertical=[5.5,5.5,5.5,5.5], $fn=8); //nema17(places=[1, 0, 1, 1], h=11);
             }
 
             // motor screw holes
             translate([21-5, -21-11, 30.25]){
                 // belt hole
-                translate([-30, 11, -0.25]) cube([11, 36, 24], center = true);
+                translate([-30, 11, 0]) cube([11, 31, 23], center = true);
+                // pulley hole
+                translate([-24.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=20, r=14, $fn=8);
+                // Set screw hole
+                translate([-26-3, 0, 14*cos(180/8)-0.01]) screw_hole(type=screw_M3_socket_head, hole_support=true, length=3);
                 //motor mounting holes
-                translate([-28.5-10.5, 0, 0]) rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, shadow=15, head_drop=12, $fn=8, h=10);
+                translate([-28.5-10.5, 0, 0]) rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, head_drop=10, $fn=8, h=10);
                 //translate([-28.5, 0, 0]) rotate([0, 0, 0])  rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, shadow=5, $fn=8, h=10);
             }
         }
+        // support wall
+        translate([21-5, -21-14, 30.25]) translate([-32+single_wall_width/2, 0, 0]) cube([single_wall_width, 25, 26], center = true);
         //smooth rod caps
         translate([-22, -10, 0]) cube([17, 2, 15]);
         translate([-22, -10, 45]) cube([17, 2, 10]);

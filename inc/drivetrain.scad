@@ -28,21 +28,21 @@ module nema17_motor(height=42, color=true) {
 	}
 }
 
-module motor_plate(thickness=10, width=stepper_motor_width, slot_length=0, head_drop=5, hole_support=false){
+module motor_plate(thickness=10, width=stepper_motor_width, slot_length=0, vertical=[0,0,0,0], head_drop=5, hole_support=false, $fn=0){
 	difference(){
 		union(){
             // Motor holding part
             difference(){
 				union(){
-					nema17(places=[1,1,1,1], h=thickness, slot_length=slot_length);
-					translate([0, 0, thickness/2]) cube([width,width,thickness], center = true);
+					//nema17(places=[1,1,1,1], h=thickness, slot_length=slot_length);
+					translate([0, 0, thickness/2]) cube_fillet([width,width,thickness], vertical=vertical, center = true);
 				}
 
                 // motor screw holes
-				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, slot_length=slot_length, $fn=0, hole_support=hole_support);
+				translate([0, 0, thickness]) mirror([0,0,1]) nema17(places=[1,1,1,1], holes=true, head_drop=head_drop, h=thickness, slot_length=slot_length, $fn=$fn, hole_support=hole_support);
 						
 				// center hole
-				translate ([0, 0, thickness/2]) cylinder_slot(r=11.5,h=thickness+1, length=slot_length, center = true);
+				translate ([0, 0, thickness/2]) cylinder_slot(r=hole_fit(11.5*2,$fn)/2,h=thickness+1, length=slot_length, center = true, $fn=$fn);
             }
 				translate([0, 0, -42]) nema17_motor();
         }
