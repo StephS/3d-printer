@@ -58,6 +58,7 @@ module x_end_motor(){
         // support wall
         translate([-16 +single_wall_width/2, -21-13, 30.25]) {
     	    cube([single_wall_width, pulley_hole_dia_w_belt/2*cos(180/8)*0.83, 36],center=true);
+    	    if ( (pulley_hole_dia_w_belt/2*cos(180/8)-1.75)/2+(pulley_hole_dia_w_belt/2*cos(180/8)*0.83)/4 +(pulley_hole_dia_w_belt*cos(180/8)-23)/4 < 11.5)
     	    translate([0, (pulley_hole_dia_w_belt/2*cos(180/8)-1.75)/2+(pulley_hole_dia_w_belt/2*cos(180/8)*0.83)/4 +(pulley_hole_dia_w_belt*cos(180/8)-23)/4, 0]) cube([single_wall_width, pulley_hole_dia_w_belt/2*cos(180/8)-1.75 -(pulley_hole_dia_w_belt/2*cos(180/8)*0.83)/2 -(pulley_hole_dia_w_belt*cos(180/8)-23)/2, 28],center=true);
 		}
         //smooth rod caps
