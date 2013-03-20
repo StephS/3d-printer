@@ -138,7 +138,7 @@ y_rod_separation=140;
 y_clamp_separation=100;
 
 // this is where the bottom of the Y rod will be.
-y_rod_height=support_wall_thickness+10;
+y_rod_height=support_wall_thickness+12;
 
 // LM8UU dimensions
 // LM8UU_length = conf_b[2];

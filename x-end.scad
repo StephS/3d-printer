@@ -16,7 +16,9 @@ x_box_height = 52 + 2 * bushing_xy[0];
 x_box_width = (bushing_xy[0] <= 4) ? 17.5 : bushing_xy[0] * 2 + 9.5;
 
 module x_end_motor(){
-
+	pulley_hole_dia=hole_fit(pulley[7],8)+0.2;
+	pulley_hole_dia_w_belt=pulley_hole_dia+belt[3]*2;
+	
     mirror([0, 1, 0]) {
 
         x_end_base([3, 3, min((bushing_xy[0] - 4) * 2, 3), 0], thru=false);
@@ -42,9 +44,9 @@ module x_end_motor(){
                 // belt hole
                 translate([-30, 11, 0]) cube([11, 31, 23], center = true);
                 // pulley hole
-                translate([-24.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/12]) cylinder(h=11, r=hole_fit(pulley[7],12)/2+belt[3]+0.1, $fn=12);
+                translate([-24.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=11, r=pulley_hole_dia_w_belt/2, $fn=8);
                 // pulley hole 2
-                translate([-23.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=20, r=hole_fit(pulley[7],8)/2+0.1, $fn=8);
+                translate([-23.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=20, r=pulley_hole_dia/2, $fn=8);
                 
                 // Set screw hole
                 //translate([-26-3, 0, 14*cos(180/8)-0.01]) screw_hole(type=screw_M3_socket_head, hole_support=true, length=3);
@@ -54,14 +56,9 @@ module x_end_motor(){
             }
         }
         // support wall
-        translate([-16 +single_wall_width/2, -21-13, 30.25]) difference() {
-    	    //cube([single_wall_width, 25, 26], center = true);
-    	    union() {
-    		    rotate([0, -90, 0]) rotate([0,0, 180/12]) cylinder(h=single_wall_width, r=hole_fit(pulley[7],12)/2+belt[3]+0.2, $fn=12, center=true);
-    		    translate([-(single_wall_width)/2, 0, -13]) cube([single_wall_width, 11.5, 26]);
-			}
-    	    rotate([0, -90, 0]) rotate([0,0, 180/2]) cylinder(h=single_wall_width*2, r=8, $fn=4, center=true);
-    	    translate([-(single_wall_width+1)/2, 11.5, -14]) cube([single_wall_width+1, (hole_fit(pulley[7],12)/2+belt[3]+0.2)*cos(180/12)-11, 28]);
+        translate([-16 +single_wall_width/2, -21-13, 30.25]) {
+    	    cube([single_wall_width, pulley_hole_dia_w_belt/2*cos(180/8)*0.83, 36],center=true);
+    	    translate([0, (pulley_hole_dia_w_belt/2*cos(180/8)-1.75)/2+(pulley_hole_dia_w_belt/2*cos(180/8)*0.83)/4 +(pulley_hole_dia_w_belt*cos(180/8)-23)/4, 0]) cube([single_wall_width, pulley_hole_dia_w_belt/2*cos(180/8)-1.75 -(pulley_hole_dia_w_belt/2*cos(180/8)*0.83)/2 -(pulley_hole_dia_w_belt*cos(180/8)-23)/2, 28],center=true);
 		}
         //smooth rod caps
         translate([-22, -10, 0]) cube([17, 2, 15]);

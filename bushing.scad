@@ -151,32 +151,6 @@ module y_bearing(conf_b=bushing_xy){
     }
 }
 
-module bearing_clamp_brick(conf_b, h){
-    translate([-(m4_nut_diameter/2+conf_b[1]), 0, 0])
-        #cube([m4_nut_diameter + 2 * conf_b[1], m4_nut_diameter + 1, h], center = true);
-}
-
-module bearing_clamp(conf_b=bushing_xy, h=0){
-    // inspired by John Ridley and Jonas Kühling
-    rotate([90, 0, 0]) {
-        difference(){
-            union(){
-                translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, 0])
-                    cylinder(h=h, r = m4_nut_diameter / 2 + 0.5, center = true);
-                translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, 0]) {
-                    bearing_clamp_brick(conf_b, h);
-                    rotate([0,0,35])
-                        bearing_clamp_brick(conf_b, h);
-                }
-            }
-            translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, 0]) {
-                cylinder(r=m3_diameter / 2, h=h+2, center=true);
-                %cylinder(r=m3_diameter / 2, h=h+2, center=true);
-            }
-        }
-    }
-}
-
 module bearing_clamp_brick2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
 	translate ([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3)))/2.78+0.3,0,h/2])
 	rotate([0,90,0])
@@ -189,11 +163,11 @@ module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_hei
 		union() {
 		bearing_clamp_brick2(conf_b,w1,w2,h);
 		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
-			rotate([90,0,0]) rotate([0,0,180/8]) cylinder(r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.1,$fn=8), r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
+			rotate([90,0,0]) rotate([0,0,180/8]) cylinder(r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.2,$fn=8), r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
 		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
-			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.1,$fn=8), r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
+			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.2,$fn=8), r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
 		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, 0, h/2])
-			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.3+(w1-w2)/2,$fn=8), h=w2, $fn=8, center=true);	
+			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=w2, $fn=8, center=true);	
 		}
 		//translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
 		
