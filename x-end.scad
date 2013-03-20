@@ -38,20 +38,31 @@ module x_end_motor(){
             }
 
             // motor screw holes
-            translate([21-5, -21-11, 30.25]){
+            translate([16, -21-11, 30.25]){
                 // belt hole
                 translate([-30, 11, 0]) cube([11, 31, 23], center = true);
                 // pulley hole
-                translate([-24.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=20, r=14, $fn=8);
+                translate([-24.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/12]) cylinder(h=11, r=hole_fit(pulley[7],12)/2+belt[3]+0.1, $fn=12);
+                // pulley hole 2
+                translate([-23.5, 0, 0]) rotate([90, 0, 0])  rotate([0, -90, 0]) rotate([0,0, 180/8]) cylinder(h=20, r=hole_fit(pulley[7],8)/2+0.1, $fn=8);
+                
                 // Set screw hole
-                translate([-26-3, 0, 14*cos(180/8)-0.01]) screw_hole(type=screw_M3_socket_head, hole_support=true, length=3);
+                //translate([-26-3, 0, 14*cos(180/8)-0.01]) screw_hole(type=screw_M3_socket_head, hole_support=true, length=3);
                 //motor mounting holes
                 translate([-28.5-10.5, 0, 0]) rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, head_drop=10, $fn=8, h=10);
                 //translate([-28.5, 0, 0]) rotate([0, 0, 0])  rotate([0, 90, 0]) nema17(places=[1, 1, 0, 1], holes=true, shadow=5, $fn=8, h=10);
             }
         }
         // support wall
-        translate([21-5, -21-14, 30.25]) translate([-32+single_wall_width/2, 0, 0]) cube([single_wall_width, 25, 26], center = true);
+        translate([-16 +single_wall_width/2, -21-13, 30.25]) difference() {
+    	    //cube([single_wall_width, 25, 26], center = true);
+    	    union() {
+    		    rotate([0, -90, 0]) rotate([0,0, 180/12]) cylinder(h=single_wall_width, r=hole_fit(pulley[7],12)/2+belt[3]+0.2, $fn=12, center=true);
+    		    translate([-(single_wall_width)/2, 0, -13]) cube([single_wall_width, 11.5, 26]);
+			}
+    	    rotate([0, -90, 0]) rotate([0,0, 180/2]) cylinder(h=single_wall_width*2, r=8, $fn=4, center=true);
+    	    translate([-(single_wall_width+1)/2, 11.5, -14]) cube([single_wall_width+1, (hole_fit(pulley[7],12)/2+belt[3]+0.2)*cos(180/12)-11, 28]);
+		}
         //smooth rod caps
         translate([-22, -10, 0]) cube([17, 2, 15]);
         translate([-22, -10, 45]) cube([17, 2, 10]);
@@ -116,6 +127,13 @@ module x_end_idler(){
     }
 }
 
+module pushfit_rod(diameter, length){
+    cylinder(h = length, r=hole_fit( dia=diameter,$fn=30)/2, $fn=30);
+    translate([0, -diameter/4, length/2]) cube([diameter, diameter/2, length], center = true);
+
+    translate([0, -diameter/2-1.2, length/2]) cube([diameter, 1, length], center = true);
+}
+
 /*
 module x_end_idler(){
     difference() {
@@ -141,13 +159,6 @@ module x_tensioner(len=62, idler_height=16) {
 //translate([-40, 0, 4 - bushing_xy[0]]) x_tensioner();
 mirror([0, 0, 0]) x_end_idler(thru=true);
 translate([50, 0, 0]) x_end_motor();
-
-module pushfit_rod(diameter, length){
-    cylinder(h = length, r=hole_fit( dia=diameter,$fn=30)/2, $fn=30);
-    translate([0, -diameter/4, length/2]) cube([diameter, diameter/2, length], center = true);
-
-    translate([0, -diameter/2-1.2, length/2]) cube([diameter, 1, length], center = true);
-}
 
 if (x_idler_bearing[3] == 1) {
     translate([-25, -20 - x_idler_bearing[0] / 2, 0]) {
