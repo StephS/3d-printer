@@ -25,8 +25,8 @@ module x_end_motor(){
         translate([0, -z_delta - 2.5, 0]) difference(){
             union(){
 				translate([0, +z_delta + 2.5, 0]) {
-					x_end_base(vfillet=[3, 3, 3, 9], tfillet=[5, 3, 9, 3], thru=false, len=40+13 + z_delta, offset=-(13 + z_delta));
-					translate([x_box_x_axis_center, -18, x_box_height/2]) cube_fillet([x_box_width, 10, x_box_height],vertical=[0, 0, 3+0.01, 9+0.01], top=[0, 3+0.01, 9+0.01, 3+0.01], center=true);
+					x_end_base(vfillet=[3, 3, 0, 0], tfillet=[5, 3, 3, 3], thru=false, len=40 + z_delta, offset=-( z_delta));
+					translate([x_box_x_axis_center, -16.5, 51.25/2]) cube_fillet([x_box_width, 13.5, 51.25],vertical=[0, 0, 3+0.01, 9+0.01], top=[0, 3, 3, 3], center=true);
 				}
                 intersection() {
                     translate([-15, -34, 30]) cube([20, 60, x_box_height], center = true);
@@ -154,9 +154,8 @@ module x_tensioner(len=62, idler_height=16) {
 */
 
 //translate([-40, 0, 4 - bushing_xy[0]]) x_tensioner();
-//mirror([0, 0, 0]) x_end_idler(thru=true);
-//translate([50, 0, 0]) x_end_motor();
-x_end_motor();
+mirror([0, 0, 0]) x_end_idler(thru=true);
+translate([50, 0, 0]) x_end_motor();
 
 if (x_idler_bearing[3] == 1) {
     translate([-25, -20 - x_idler_bearing[0] / 2, 0]) {
