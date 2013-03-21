@@ -8,6 +8,7 @@ use <bushing.scad>
 use <extrusion_bracket.scad>
 use <extras/gregs-wade-v3.scad>
 use <feet.scad>
+use <y-belt-holder.scad>
 
 // feet
 translate(v = [x_width/2 - extrusion[0]/2,y_length/2 + extrusion[0]/2,extrusion[0]]) rotate([180,0,0]) feet();
@@ -98,6 +99,8 @@ translate([0,0, extrusion[0]*2]) {
 		}
 
 	}
+	
+	translate([0, 0, bushing_height+y_rod_height+smooth_rod_diameter/2]) rotate(a=[0,180,-90]) i3_belt_clamp();
 	
 	// Y axis
 	translate(v = [y_rod_separation/2, 0, 0]) {

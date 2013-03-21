@@ -122,23 +122,23 @@ module linear_bearing(conf_b=bushing_xy, h=0){
 }
 
 // this should be more parametric
-module firm_foot(conf_b){
+module firm_foot(conf_b, hole_spacing=29, foot_thickness=y_bushing_height, h=bushing_xy[2]+9*layer_height){
     difference(){
         union() {
-            translate([8.5/2,0,0]) cube_fillet([8.5, 42 + xy_delta * 2, 20], top=[11, 0, 11, 0], center=true);
+            translate([foot_thickness/2,0,0]) cube_fillet([foot_thickness, hole_spacing+12, h], top=[13, 0, 13, 0], center=true);
         }
-        translate([9, 14.5 + xy_delta, 0]) rotate([0, -90, 0]) screw_hole(type=y_bearing_screw, head_drop=0, $fn=8);
-        translate([9,-14.5 - xy_delta, 0]) rotate([0,-90,0]) screw_hole(type=y_bearing_screw, head_drop=0, $fn=8);
+        translate([foot_thickness, hole_spacing/2, 0]) rotate([0, -90, 0]) screw_hole(type=y_carriage_screw, head_drop=0, $fn=8);
+        translate([foot_thickness,-hole_spacing/2, 0]) rotate([0,-90,0]) screw_hole(type=y_carriage_screw, head_drop=0, $fn=8);
     }
 }
 
-module y_bearing(conf_b=bushing_xy){
+module y_bearing(conf_b=bushing_xy, height=y_bushing_height, hole_spacing=y_carriage_hole_spacing){
 
     difference() {
         union() {
             difference() {
                 union() {
-                    translate([-bushing_foot_len(conf_b), 0, 10]) firm_foot();
+                    translate([-conf_b[1]-height, 0, (conf_b[2]+9*layer_height)/2]) firm_foot(conf_b, foot_thickness=height, hole_spacing=hole_spacing);
                     if (bushing_xy[2] > 45) {
                         translate([-bushing_foot_len(conf_b), 0, adjust_bushing_len(bushing_xy, 45) - 8]) mirror([0, 0, 1]) firm_foot();
                     }

@@ -17,7 +17,7 @@ carriage_l = 86;
 carriage_hole_to_side = 3;
 carriage_hole_height = 4;
 
-bushing_carriage_len = adjust_bushing_len(bushing_carriage, 21, layer_height * 9);
+bushing_carriage_len = adjust_bushing_len(bushing_x_carriage, 21, layer_height * 9);
 
 x_beltclamp_space = (carriage_l - bushing_carriage_len) - 2;
 
@@ -31,8 +31,8 @@ module x_carriage(){
                 //upper bearing
                 rotate([0,0,180]) {
                     difference(){
-                        linear(bushing_carriage);
-                        translate([-15, -9/2, -0.1]) cube([3, 9, bushing_carriage[2] + 5]);
+                        linear(bushing_x_carriage);
+                        translate([-15, -9/2, -0.1]) cube([3, 9, bushing_x_carriage[2] + 5]);
                     }
                 }
                 translate([6.5, -10, 0]) cube_fillet([4.5, 20, bushing_carriage_len], vertical = [2,2,3,0]);
@@ -95,7 +95,7 @@ module x_carriage(){
             }
             //upper bearing
             rotate([0,0,180]) {
-                linear_negative(bushing_carriage);
+                linear_negative(bushing_x_carriage);
             }
 
             //lower bearing
