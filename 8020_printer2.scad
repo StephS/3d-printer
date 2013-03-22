@@ -100,7 +100,8 @@ translate([0,0, extrusion[0]*2]) {
 
 	}
 	
-	translate([0, 0, bushing_height+y_rod_height+smooth_rod_diameter/2]) rotate(a=[0,180,-90]) i3_belt_clamp();
+	// why is my math off by 1?
+	translate([0, 0, 1+ bushing_height+y_rod_height+smooth_rod_diameter/2]) rotate(a=[0,180,-90]) i3_belt_clamp();
 	
 	// Y axis
 	translate(v = [y_rod_separation/2, 0, 0]) {
