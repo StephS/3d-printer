@@ -38,7 +38,7 @@ translate([0,0, extrusion[0]*2]) {
 			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height +extrusion[0]/2]) z_rod_mount();
 		
 			// z axis smooth rod
-			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=z_smooth_rod_length, center = true);
+			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=z_smooth_rod_diameter/2,h=z_smooth_rod_length, center = true);
 					
 			// z axis screw
 			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=5/2,h=z_smooth_rod_length, center = true);
@@ -84,7 +84,7 @@ translate([0,0, extrusion[0]*2]) {
 			translate(v = [(z_screw_rod_separation+stepper_motor_padded/2),-extrusion[0]/2,z_height +extrusion[0]/2]) z_rod_mount();
 				
 			// z axis smooth rod
-			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=z_smooth_rod_length, center = true);
+			translate([(z_screw_rod_separation+stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=z_smooth_rod_diameter/2,h=z_smooth_rod_length, center = true);
 							
 			// z axis screw
 			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=5/2,h=z_smooth_rod_length, center = true);
@@ -101,7 +101,7 @@ translate([0,0, extrusion[0]*2]) {
 	}
 	
 	// why is my math off by 1?
-	translate([0, 0, 1+ bushing_height+y_rod_height+smooth_rod_diameter/2]) rotate(a=[0,180,-90]) i3_belt_clamp();
+	translate([0, 0, 1+ bushing_height+y_rod_height+xy_smooth_rod_diameter/2]) rotate(a=[0,180,-90]) i3_belt_clamp();
 	
 	// Y axis
 	translate(v = [y_rod_separation/2, 0, 0]) {
@@ -112,7 +112,7 @@ translate([0,0, extrusion[0]*2]) {
 		translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 		translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 		// y axis smooth rod
-		translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
+		translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=xy_smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
 	}
 	mirror([1, 0, 0]) {
 		translate(v = [y_rod_separation/2, 0, 0]) {
@@ -123,7 +123,7 @@ translate([0,0, extrusion[0]*2]) {
 			translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 			translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
 			// y axis smooth rod
-			translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
+			translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=xy_smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
 		}
 	}
 }

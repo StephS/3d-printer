@@ -1,9 +1,9 @@
-function poly_sides(r) = (max(round(4 * r),3)+1);
+function poly_sides_r(r) = (max(round(4 * r),3)+1);
 
 // 2d primitive for outside fillets.
 module fillet_2d_o(fillet_r, fillet_angle=90, fillet_fn=0) {
   add=0.01;
-  f_fn=(fillet_fn>0) ? fillet_fn*4 : (ceil(poly_sides(fillet_r)/4)*4);
+  f_fn=(fillet_fn>0) ? fillet_fn*4 : (ceil(poly_sides_r(fillet_r)/4)*4);
   if (fillet_r>0) {
   intersection() {
     circle(r=fillet_r, $fn=f_fn);
@@ -20,7 +20,7 @@ module fillet_2d_o(fillet_r, fillet_angle=90, fillet_fn=0) {
 // 2d primitive for inside fillets.
 module fillet_2d_i(fillet_r, fillet_angle=90, fillet_fn=0) {
   add=0.01;
-  f_fn=(fillet_fn>0) ? fillet_fn*4 : (ceil(poly_sides(fillet_r)/4)*4);
+  f_fn=(fillet_fn>0) ? fillet_fn*4 : (ceil(poly_sides_r(fillet_r)/4)*4);
   if (fillet_r>0) {
   translate([fillet_r * tan(fillet_angle/2), fillet_r, 0])
   difference() {

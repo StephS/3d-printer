@@ -56,8 +56,6 @@ z_screw_rod_separation=17;
 support_wall_thickness=5;
 motor_mount_thickness=10;
 
-smooth_rod_diameter=8;
-
 // Choose screws configuration ***************************************
 // screw used for the Y idler bearing. make sure it matches the ID of the bearing.
 y_bearing_screw = screw_M4_button_head;
@@ -90,7 +88,6 @@ top_x_width_in=x_width_in;
 y_length = y_length_in * inch;
 x_width = x_width_in * inch;
 z_height = z_height_in * inch;
-top_x_width = top_x_width_in * inch + smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
 
 // Smooth rod length is automatically calculated by extrusion length (can do vice-versa)
 // the width of the X axis smooth rod block is 50, we have 2, so add in 100
@@ -107,6 +104,11 @@ bushing_z = conf_b_lm8uu;
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
 bushing_x_carriage = bushing_xy;
+
+xy_smooth_rod_diameter=bushing_xy[0]*2;
+z_smooth_rod_diameter=bushing_z[0]*2;
+
+top_x_width = top_x_width_in * inch + z_smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
 
 // Select idler bearing size **************************************************
 // [outer_diameter, width, inner_diameter, uses_guide]
@@ -150,7 +152,7 @@ y_rod_height=support_wall_thickness+7;
 // LM8UU_length = conf_b[2];
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
 bushing_height = bushing_xy[1]+y_bushing_height;
-y_belt_center=(y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[8] + pulley_height_from_motor);
+y_belt_center=(y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
 y_belt_clamp_hole_distance=18;
@@ -183,8 +185,8 @@ echo("Y axis smooth rod length = ", y_smooth_rod_length, " inch=", y_smooth_rod_
 echo("Z axis smooth rod length = ", z_smooth_rod_length, " inch=", z_smooth_rod_length/inch);
 
 //Check to be sure the pulley doesn't hit the Y bed
-if ((y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
-echo("Distance between bed and Y pulley:", (y_rod_height+smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor));
+if ((y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
+echo("Distance between bed and Y pulley:", (y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor));
 
 // These constants define the geometry of the complete-printer.scad
 

@@ -72,9 +72,9 @@ module x_end_base(vfillet=[3, 3, 3, 3], tfillet=[5, 3, 5, 3], thru=true, len=40,
         union(){
             translate([-10 - bushing_xy[0], -10 + len / 2 + offset, 30]) cube_fillet([x_box_width, len, x_box_height], center=true, vertical=vfillet, top=tfillet);
 
-            translate([0, 0, 4 - bushing_xy[0]]) {
+            translate([z_delta, 0, 4 - bushing_xy[0]]) {
                 //rotate([0, 0, 0]) translate([0, -9.5, 0]) 
-                translate([z_delta, 0, 0]) render(convexity = 5) linear(bushing_z, x_box_height);
+                render(convexity = 5) linear(bushing_z, x_box_height);
                 // Nut trap
                 translate([-2, 18, 5]) cube_fillet([20, 14, 10], center = true, vertical=[8, 0, 0, 5], $fn=4);
                 //}
@@ -96,7 +96,7 @@ module x_end_base(vfillet=[3, 3, 3, 3], tfillet=[5, 3, 5, 3], thru=true, len=40,
             }
         }
         translate([0, 0, 5 - bushing_xy[0]]) {  // m5 nut insert
-            translate([0, 17, 0]) rotate([0, 0, 45]){
+            translate([z_delta, 17, 0]) rotate([0, 0, 45]){
 
                 cylinder_poly(h = 40, r=hole_fit(2.65*2, $fn=poly_sides(2.65*2))/2, center=true);
                 //nut slid in
