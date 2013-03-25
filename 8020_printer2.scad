@@ -26,8 +26,9 @@ translate([0,0, extrusion[0]*2]) {
 	translate(v = [0,-(y_length/2 + extrusion[0]/2),-extrusion[0]/2]) rotate(a=[0,90,0]) extrusion(length= x_width);
 	echo("Max platform width = ", x_width-extrusion[0]*2);
 
-	translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25))), 0]) {
+	translate([0, y_length/2-z_extrusion_pos, 0]) {
 		// Z vertical bars
+		
 		translate([x_width/2,0,0]) {
 			translate([-extrusion[0]/2,0,(z_height)/2]) extrusion(length= z_height);
 			
@@ -72,7 +73,7 @@ translate([0,0, extrusion[0]*2]) {
 		}
 	}
 
-	mirror([1, 0, 0]) translate([0, -((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25))), 0]) {
+	mirror([1, 0, 0]) translate([0, y_length/2-z_extrusion_pos, 0]) {
 		translate([x_width/2,0,0]) {
 			// Z vertical bar
 			translate([-extrusion[0]/2,0,(z_height)/2]) extrusion(length= z_height);

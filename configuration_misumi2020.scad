@@ -173,7 +173,8 @@ z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 
 // Don't change these calculations. They are for calculating the Brace position.
 brace_offset=(extrusion[0]*2-extrusion[0]/sin(45));
-brace_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)))-extrusion[0]*2;
+z_extrusion_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)));
+brace_pos=z_extrusion_pos-extrusion[0]*2;
 
 echo("X axis extrusion length = ", x_width, " inch=", (x_width)/inch);
 echo("top support X axis extrusion length = ", top_x_width, " inch=", (top_x_width)/inch);
@@ -183,6 +184,10 @@ echo("Z axis Brace length = ", (brace_pos+brace_offset-support_wall_thickness-ex
 echo("X axis smooth rod length = ", x_smooth_rod_length, " inch=", x_smooth_rod_length/inch);
 echo("Y axis smooth rod length = ", y_smooth_rod_length, " inch=", y_smooth_rod_length/inch);
 echo("Z axis smooth rod length = ", z_smooth_rod_length, " inch=", z_smooth_rod_length/inch);
+
+echo("Drill locations:");
+echo("For Z axis extrusion mount, drill Y axis extrusion at ", z_extrusion_pos, "inch=", z_extrusion_pos/inch, " from end." );
+echo("For X axis top extrusion mount, drill top X axis extrusion at ", ((top_x_width-x_width)/2+extrusion[0]/2), "inch=", ((top_x_width-x_width)/2+extrusion[0]/2)/inch, "from both ends.");
 
 //Check to be sure the pulley doesn't hit the Y bed
 if ((y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
