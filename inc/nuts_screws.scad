@@ -104,7 +104,7 @@ module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer
 				}
 			}
 			if (hole_support) translate([0, 0, -0.01]) {
-				cylinder_slot(h=layer_height+0.01, r=head_top_dia/2, length=length, $fn=$fn);
+				cylinder_slot(h=layer_height+0.02, r=head_top_dia/2, length=length, $fn=$fn);
 			}
 		}
 	}

@@ -68,6 +68,7 @@ y_bushing_height=(support_wall_thickness+2);
 
 // screw used to mount parts to the extrusion
 ex_screw=screw_M5_button_head;
+ex_nut=nut_jam_M5;
 
 // extrusion parameters
 // 10 series 8020 (inch) conf_ex_8020_10s
