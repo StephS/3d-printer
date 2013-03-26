@@ -46,8 +46,8 @@ module ex_nut_clip() {
 module ex_drill_guide() {
 	difference() {
 		union() {
-			ex_clip_base(length=extrusion[0]);
-			translate([0,0,extrusion[0]/4+ex_allowance]) cube([extrusion[0],extrusion[0]-ex_wall_width*2-ex_allowance,extrusion[0]/2-ex_allowance],center=true);
+			translate([extrusion[0]/4-extrusion[4]/4,0,0]) ex_clip_base(length=extrusion[0]/2+extrusion[4]/2+0.02);
+			translate([extrusion[0]/4-extrusion[4]/4,0,extrusion[0]/4+ex_allowance]) cube([extrusion[0]/2+extrusion[4]/2+0.02,extrusion[0]-ex_wall_width*2-ex_allowance,extrusion[0]/2-ex_allowance],center=true);
 			translate([extrusion[0]/2,-extrusion[0]/2,0]) cube([3,extrusion[0],extrusion[0]/2]);
 		}
 		translate([0,0,-0.01]) rod_hole(d=screw_dia(ex_screw)*0.9, h=extrusion[0]);
