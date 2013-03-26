@@ -43,6 +43,19 @@ module ex_nut_clip() {
 	}
 }
 
+module ex_drill_guide() {
+	difference() {
+		union() {
+			ex_clip_base(length=extrusion[0]);
+			translate([0,0,extrusion[0]/4+ex_allowance]) cube([extrusion[0],extrusion[0]-ex_wall_width*2-ex_allowance,extrusion[0]/2-ex_allowance],center=true);
+			translate([extrusion[0]/2,-extrusion[0]/2,0]) cube([3,extrusion[0],extrusion[0]/2]);
+		}
+		translate([0,0,-0.01]) rod_hole(d=screw_dia(ex_screw)*0.9, h=extrusion[0]);
+		//#screw_hole(type=ex_screw,head_drop=((extrusion[0]-extrusion[4])/2-extrusion[3]-ex_allowance)+0.01, h=extrusion[0], hole_support=true, $fn=12);
+	}
+}
+
 ex_end_clip();
 
 translate([0,extrusion[0]-extrusion[4],0]) ex_nut_clip();
+translate([0,-(extrusion[0]),0]) ex_drill_guide();
