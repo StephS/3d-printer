@@ -18,31 +18,31 @@ function bushing_outer_radius(conf_b) = conf_b[1] + 4*single_wall_width;
 // basic building blocks, housings for 1 bushing/bearing
 // at [0,0] there is center of the smooth rod, pointing in Z
 
-module linear_bushing_negative_single(conf_b=bushing_xy, h=0){
+module linear_bushing_negative_single(conf_b=bushing_y, h=0){
     // barrel with the dimensions of a bushing/bearing
     // to be substracted as needed
     translate([0, 0, -0.01])  cylinder(r = conf_b[1], h = adjust_bushing_len(conf_b, h) + 0.02);
 }
 
-module linear_bearing_negative_single(conf_b=bushing_xy, h=0){
+module linear_bearing_negative_single(conf_b=bushing_y, h=0){
     // as above but moved by 3 layers up
     translate([0, 0, -0.01+3*layer_height])  cylinder(r = conf_b[1], h = adjust_bushing_len(conf_b, h) + 0.02);
 }
 
-module linear_bushing_single(conf_b=bushing_xy, h=0) {
+module linear_bushing_single(conf_b=bushing_y, h=0) {
     // This is the printed barrel around bushing
     // with foot pointing to -x
     translate([-bushing_foot_len(conf_b), -7, 0]) cube([bushing_foot_len(conf_b), 14, adjust_bushing_len(conf_b, h)]);
     cylinder(r=bushing_outer_radius(conf_b), h=adjust_bushing_len(conf_b, h));
 }
 
-module linear_bushing_negative(conf_b=bushing_xy, h=0){
+module linear_bushing_negative(conf_b=bushing_y, h=0){
     // return simple negative stretched all along and a smooth rod
     translate([0,0,-0.1]) cylinder(r = conf_b[0] + single_wall_width, h=adjust_bushing_len(conf_b, h)+0.2);
     linear_bushing_negative_single(conf_b, h=adjust_bushing_len(conf_b, h));
 }
 
-module linear_bearing_negative(conf_b = bushing_xy, h = 0){
+module linear_bearing_negative(conf_b = bushing_y, h = 0){
     //same as linear_bushing_negative, but with z direction constrained parts
     translate([0,0,-0.1]) cylinder(r = conf_b[0] + single_wall_width, h=adjust_bushing_len(conf_b, h, 8*layer_height)+0.2);
     //lower bearing
@@ -52,13 +52,13 @@ module linear_bearing_negative(conf_b = bushing_xy, h = 0){
     }
 }
 
-module linear_negative_preclean(conf_b = bushing_xy) {
+module linear_negative_preclean(conf_b = bushing_y) {
     // makes sure there is nothing interfering
     // to be substracted before linear()
     cylinder(r = conf_b[1] + single_wall_width, h=300, center=true);
 }
 
-module linear_bushing_sloped(conf_b=bushing_xy, h= 100){
+module linear_bushing_sloped(conf_b=bushing_y, h= 100){
     // cut the bushing at angle, so it can be printed upside down
     intersection(){
         linear_bushing_single(conf_b, h = h);
@@ -68,7 +68,7 @@ module linear_bushing_sloped(conf_b=bushing_xy, h= 100){
     }
 }
 
-module linear_bushing(conf_b=bushing_xy, h=0){
+module linear_bushing(conf_b=bushing_y, h=0){
     // this is the function to be used for type 1 linears (barrel holder)
     // It has bushing on bottom and for parts longer than 3x the barel length on top too
     difference() {
@@ -83,7 +83,7 @@ module linear_bushing(conf_b=bushing_xy, h=0){
     }
 }
 
-module linear_bearing(conf_b=bushing_xy, h=0){
+module linear_bearing(conf_b=bushing_y, h=0){
     difference() {
         union() {
             difference(){
@@ -122,7 +122,7 @@ module linear_bearing(conf_b=bushing_xy, h=0){
 }
 
 // this should be more parametric
-module firm_foot(conf_b, hole_spacing=29, foot_thickness=y_bushing_height, h=bushing_xy[2]+9*layer_height){
+module firm_foot(conf_b, hole_spacing=29, foot_thickness=y_bushing_mount_height, h=bushing_y[2]+9*layer_height){
     difference(){
         union() {
             translate([foot_thickness/2,0,0]) cube_fillet([foot_thickness, hole_spacing+12, h], top=[13, 0, 13, 0], center=true);
@@ -132,33 +132,33 @@ module firm_foot(conf_b, hole_spacing=29, foot_thickness=y_bushing_height, h=bus
     }
 }
 
-module y_bearing(conf_b=bushing_xy, height=y_bushing_height, hole_spacing=y_carriage_hole_spacing){
+module y_bearing(conf_b=bushing_y, height=y_bushing_mount_height, hole_spacing=y_carriage_hole_spacing){
 
     difference() {
         union() {
             difference() {
                 union() {
                     translate([-conf_b[1]-height, 0, (conf_b[2]+9*layer_height)/2]) firm_foot(conf_b, foot_thickness=height, hole_spacing=hole_spacing);
-                    if (bushing_xy[2] > 45) {
-                        translate([-bushing_foot_len(conf_b), 0, adjust_bushing_len(bushing_xy, 45) - 8]) mirror([0, 0, 1]) firm_foot();
+                    if (conf_b[2] > 45) {
+                        translate([-bushing_foot_len(conf_b), 0, adjust_bushing_len(conf_b, 45) - 8]) mirror([0, 0, 1]) firm_foot();
                     }
                 }
                 linear_negative_preclean();
             }
             linear();
         }
-        //linear_negative(bushing_xy, 20);
+        //linear_negative(bushing_y, 20);
     }
 }
 
-module bearing_clamp_brick2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
+module bearing_clamp_brick2(conf_b=bushing_y, w1=0, w2=0, h=bushing_y[2]+9*layer_height){
 	translate ([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3)))/2.78+0.3,0,h/2])
 	rotate([0,90,0])
 	trapezoid(cube=[h, w1, conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))/1.39+0.3], x1=0, x2=0, y1=(w1-w2)/2, y2=(w1-w2)/2, center=true);
 }
 
 // w1 is outside dimensions, w2 is beveled dimensions
-module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_height){
+module bearing_clamp2(conf_b=bushing_y, w1=0, w2=0, h=bushing_y[2]+9*layer_height){
 	difference() {
 		union() {
 		bearing_clamp_brick2(conf_b,w1,w2,h);
@@ -185,7 +185,7 @@ module bearing_clamp2(conf_b=bushing_xy, w1=0, w2=0, h=bushing_xy[2]+9*layer_hei
 }
 
 
-module linear_negative(conf_b = bushing_xy, h = 0){
+module linear_negative(conf_b = bushing_y, h = 0){
     //selects right negative based on type
     if (conf_b[3] == 0) {
         linear_bearing_negative(conf_b, h);
@@ -194,7 +194,7 @@ module linear_negative(conf_b = bushing_xy, h = 0){
     }
 }
 
-module linear(conf_b = bushing_xy, h = 0){
+module linear(conf_b = bushing_y, h = 0){
     //selects right negative based on type
     if (conf_b[3] == 0) {
         linear_bearing(conf_b, h);

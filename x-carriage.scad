@@ -39,7 +39,7 @@ module x_carriage(){
 
                 //lower bearing
                 translate([xaxis_rod_distance,0,0]) {
-                    linear(bushing_xy, carriage_l);
+                    linear(bushing_x, carriage_l);
                 }
                 translate([xaxis_rod_distance - 11.5, -10, 0]) cube_fillet([5, 20, carriage_l], radius=2);
 
@@ -100,7 +100,7 @@ module x_carriage(){
 
             //lower bearing
             translate([xaxis_rod_distance,0,0]) {
-                linear_negative(bushing_xy, carriage_l);
+                linear_negative(bushing_x, carriage_l);
             }
             // extruder mounts
 

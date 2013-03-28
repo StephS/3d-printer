@@ -41,7 +41,7 @@ belt_width = 7;
 pulley = conf_pulley_17_GT2_3mm;
 
 // the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
-pulley_height_from_motor=4;
+pulley_height_from_motor=6;
 
 // Stepper motor dimensions
 stepper_motor_height=42;
@@ -64,8 +64,8 @@ y_bearing_nut = nut_M4;
 
 // Y carriage settings
 y_carriage_screw = screw_M4_button_head;
-y_carriage_hole_spacing = 29;
-y_bushing_mount_height=(support_wall_thickness+2);
+y_carriage_hole_spacing = 30.5;
+y_bushing_mount_height=15-conf_b_lm12uu[1];
 
 // screw used to mount parts to the extrusion
 ex_screw=screw_8020_1_4_flange_head;
@@ -82,9 +82,9 @@ extrusion = conf_ex_8020_10s;
 
 // extrusion lengths
 // You can delete these and just specify in millimeters below
-y_length_in = 16;
-x_width_in = 12;
-z_height_in = 13;
+y_length_in = 18;
+x_width_in = 14.25;
+z_height_in = 14.25;
 top_x_width_in=x_width_in;
 
 y_length = y_length_in * inch;
@@ -102,7 +102,7 @@ z_smooth_rod_length=(z_height+extrusion[0]);
 // conf_b_* are in inc/conf_bushing.scad
 
 bushing_x = conf_b_lm8uu;
-bushing_y = conf_b_lm8uu;
+bushing_y = conf_b_lm12uu;
 bushing_z = conf_b_lm8uu;
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
@@ -150,7 +150,7 @@ y_rod_separation=140;
 y_clamp_separation=100;
 
 // this is where the bottom of the Y rod will be.
-y_rod_height=support_wall_thickness+7;
+y_rod_height=23-y_smooth_rod_diameter/2;
 
 // LM8UU dimensions
 // LM8UU_length = conf_b[2];

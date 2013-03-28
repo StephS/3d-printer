@@ -12,9 +12,9 @@ use <bushing.scad>
 use <inc/bearing-guide.scad>
 
 //height and width of the x blocks depend on x smooth rod radius
-x_box_height = 52 + 2 * bushing_xy[0];
-x_box_width = (bushing_xy[0] <= 4) ? 17.5 : bushing_xy[0] * 2 + 9.5;
-x_box_x_axis_center = (-10 - bushing_xy[0]);
+x_box_height = 52 + 2 * bushing_x[0];
+x_box_width = (bushing_x[0] <= 4) ? 17.5 : bushing_x[0] * 2 + 9.5;
+x_box_x_axis_center = (-10 - bushing_x[0]);
 x_box_x_axis = (x_box_x_axis_center+x_box_width/2);
 
 module x_end_motor(){
@@ -31,7 +31,7 @@ module x_end_motor(){
                 intersection() {
                     translate([-15, -34, 30]) cube([20, 60, x_box_height], center = true);
                     union() {
-                        //translate([-10 - bushing_xy[0]+1/4, -14 + z_delta / 2, 24]) cube_fillet([x_box_width+1/2, 13 + z_delta, 55], center = true, vertical=[0, 0, 3, 1.5], top=[0, 3, 6, 3], $fn=16);
+                        //translate([-10 - bushing_x[0]+1/4, -14 + z_delta / 2, 24]) cube_fillet([x_box_width+1/2, 13 + z_delta, 55], center = true, vertical=[0, 0, 3, 1.5], top=[0, 3, 6, 3], $fn=16);
                         translate([x_box_x_axis-11/2, -32, 0]) intersection(){
                             translate([0, .25, 1]) cube_fillet([11, 42.5, 28], vertical=[0, 0, 5, 5], center = true);
                             translate([-11/2, 30.25*2-42+5.5/2, -30.25]) rotate([45, 0, 0]) cube_fillet([11, 60, 60], radius=2);
@@ -70,9 +70,9 @@ module x_end_base(vfillet=[3, 3, 3, 3], tfillet=[5, 3, 5, 3], thru=true, len=40,
 
     difference(){
         union(){
-            translate([-10 - bushing_xy[0], -10 + len / 2 + offset, 30]) cube_fillet([x_box_width, len, x_box_height], center=true, vertical=vfillet, top=tfillet);
+            translate([-10 - bushing_x[0], -10 + len / 2 + offset, 30]) cube_fillet([x_box_width, len, x_box_height], center=true, vertical=vfillet, top=tfillet);
 
-            translate([z_delta, 0, 4 - bushing_xy[0]]) {
+            translate([z_delta, 0, 4 - bushing_x[0]]) {
                 //rotate([0, 0, 0]) translate([0, -9.5, 0]) 
                 render(convexity = 5) linear(bushing_z, x_box_height);
                 // Nut trap
@@ -81,21 +81,21 @@ module x_end_base(vfillet=[3, 3, 3, 3], tfillet=[5, 3, 5, 3], thru=true, len=40,
             }
         }
         // here are bushings/bearings
-        translate([z_delta, 0, 4 - bushing_xy[0]]) linear_negative(bushing_z, x_box_height);
+        translate([z_delta, 0, 4 - bushing_x[0]]) linear_negative(bushing_z, x_box_height);
 
         // belt hole
         translate([-5.5 - 10 + 1.5, 22 - 9 + offset, 30]) cube([max(x_idler_width + 2, 11), len+15, 27], center = true);
 
         translate([x_box_x_axis_center, offset, 0]) {
             if(thru == true){
-                translate([0, -11+ 0.1, 6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.1, 50);
-                translate([0, -11+ 0.1, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.1, 50);
+                translate([0, -11+ 0.1, 6]) rotate([-90, 0, 0]) pushfit_rod(x_smooth_rod_diameter + 0.1, 50);
+                translate([0, -11+ 0.1, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(x_smooth_rod_diameter + 0.1, 50);
             } else {
-                translate([0, -7+ 0.1, 6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.1, 50);
-                translate([0, -7+ 0.1, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(bushing_xy[0] * 2 + 0.1, 50);
+                translate([0, -7+ 0.1, 6]) rotate([-90, 0, 0]) pushfit_rod(x_smooth_rod_diameter + 0.1, 50);
+                translate([0, -7+ 0.1, xaxis_rod_distance+6]) rotate([-90, 0, 0]) pushfit_rod(x_smooth_rod_diameter + 0.1, 50);
             }
         }
-        translate([0, 0, 5 - bushing_xy[0]]) {  // m5 nut insert
+        translate([0, 0, 5 - bushing_x[0]]) {  // m5 nut insert
             translate([z_delta, z_screw_rod_separation, 0]) rotate([0, 0, 45]){
 
                 cylinder_poly(h = 40, r=hole_fit(2.65*2, $fn=poly_sides(2.65*2))/2, center=true);
@@ -153,7 +153,7 @@ module x_tensioner(len=62, idler_height=16) {
 }
 */
 
-//translate([-40, 0, 4 - bushing_xy[0]]) x_tensioner();
+//translate([-40, 0, 4 - bushing_x[0]]) x_tensioner();
 mirror([0, 0, 0]) x_end_idler(thru=true);
 translate([50, 0, 0]) x_end_motor();
 

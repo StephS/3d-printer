@@ -64,7 +64,7 @@ y_bearing_nut = nut_M4;
 // Y carriage settings
 y_carriage_screw = screw_M4_button_head;
 y_carriage_hole_spacing = 29;
-y_bushing_height=(support_wall_thickness+2);
+y_bushing_mount_height=(support_wall_thickness+2);
 
 // screw used to mount parts to the extrusion
 ex_screw=screw_M5_button_head;
@@ -100,13 +100,15 @@ z_smooth_rod_length=(z_height+extrusion[0]);
 // Choose bearing/bushing configuration ***************************************
 // conf_b_* are in inc/conf_bushing.scad
 
-bushing_xy = conf_b_lm8uu;
+bushing_x = conf_b_lm8uu;
+bushing_y = conf_b_lm8uu;
 bushing_z = conf_b_lm8uu;
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
-bushing_x_carriage = bushing_xy;
+bushing_x_carriage = bushing_x;
 
-xy_smooth_rod_diameter=bushing_xy[0]*2;
+x_smooth_rod_diameter=bushing_x[0]*2;
+y_smooth_rod_diameter=bushing_y[0]*2;
 z_smooth_rod_diameter=bushing_z[0]*2;
 
 top_x_width = top_x_width_in * inch + z_smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
@@ -152,8 +154,8 @@ y_rod_height=support_wall_thickness+7;
 // LM8UU dimensions
 // LM8UU_length = conf_b[2];
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
-bushing_height = bushing_xy[1]+y_bushing_height;
-y_belt_center=(y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[8] + pulley_height_from_motor);
+y_bushing_height = bushing_y[1]+y_bushing_mount_height;
+y_belt_center=(y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
 y_belt_clamp_hole_distance=18;
@@ -169,12 +171,13 @@ x_idler_width = (x_idler_bearing[1] > 7 ? x_idler_bearing[1] : 7) + 2.5 * x_idle
 y_idler_width = (y_idler_bearing[1] > 7 ? y_idler_bearing[1] : 7) + 2.5 * y_idler_bearing[3] ;
 
 //deltas are used to enlarge parts for bigger bearings 
-xy_delta = ((bushing_xy[1] <= 7.7) ? 0 : bushing_xy[1] - 7.7) * 0.9;
+x_delta = ((bushing_x[1] <= 7.7) ? 0 : bushing_x[1] - 7.7) * 0.9;
+y_delta = ((bushing_y[1] <= 7.7) ? 0 : bushing_y[1] - 7.7) * 0.9;
 z_delta = (bushing_z[1] <= 7.7) ? 0 : bushing_z[1] - 7.7;
 
 // Don't change these calculations. They are for calculating the Brace position.
 brace_offset=(extrusion[0]*2-extrusion[0]*cos(30));
-z_extrusion_pos=y_length/2+((-bushing_xy[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)));
+z_extrusion_pos=y_length/2+((-bushing_x[0]+0.5-(extrusion[0]/2+support_wall_thickness+stepper_motor_padded/2))-24-3.5+(50.5-(7.4444+32.0111+0.25)));
 brace_pos=z_extrusion_pos-extrusion[0]*2;
 
 echo("X axis extrusion length = ", x_width, " inch=", (x_width)/inch);
@@ -191,8 +194,8 @@ echo("For Z axis extrusion mount, drill Y axis extrusion at ", z_extrusion_pos, 
 echo("For X axis top extrusion mount, drill top X axis extrusion at ", ((top_x_width-x_width)/2+extrusion[0]/2), "inch=", ((top_x_width-x_width)/2+extrusion[0]/2)/inch, "from both ends.");
 
 //Check to be sure the pulley doesn't hit the Y bed
-if ((y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
-echo("Distance between bed and Y pulley:", (y_rod_height+xy_smooth_rod_diameter/2+bushing_height)-(pulley[0] + pulley_height_from_motor));
+if ((y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
+echo("Distance between bed and Y pulley:", (y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[0] + pulley_height_from_motor));
 
 // These constants define the geometry of the complete-printer.scad
 
