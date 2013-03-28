@@ -78,8 +78,8 @@ module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer
     //makes screw with head
     screw=v_screw_hole(type, head_allowance=((screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance), $fn=$fn);
     
-    head_bottom_dia= (washer_type[0]>0) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_bottom_dia(screw);
-    head_top_dia= (washer_type[0]>0) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_top_dia(screw);
+    head_bottom_dia= (washer_type[0]>screw_head_bottom_dia(screw)) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_bottom_dia(screw);
+    head_top_dia= (washer_type[0]>screw_head_top_dia(screw)) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_top_dia(screw);
 	
 	head_height = ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw) : head_drop);
 	head_drop1= ((screw_head_bottom_dia(screw) < screw_head_top_dia(screw)) ? screw_head_height(screw)+head_drop : head_drop);

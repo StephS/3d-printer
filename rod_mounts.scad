@@ -70,7 +70,7 @@ translate([0, 0, extrusion[0]/2]) {
 	translate([0, 2, 0]) rotate(a=[0,0,180]) y_rod_mount();
 	translate([xy_smooth_rod_diameter+support_wall_thickness*2+screw_head_top_dia(v_screw_hole(ex_screw))+4, y_rod_height+support_wall_thickness*2+xy_smooth_rod_diameter/2+2, 0]) rotate(a=[0,0,0]) y_rod_mount();
 
-	translate([0, y_rod_height+support_wall_thickness*2+smooth_rod_diameter/2+2, 0]) {
+	translate([0, y_rod_height+support_wall_thickness*2+xy_smooth_rod_diameter/2+2, 0]) {
 		translate([0, 2, 0]) rotate(a=[0,0,180]) y_rod_mount();
 		translate([xy_smooth_rod_diameter+support_wall_thickness*2+screw_head_top_dia(v_screw_hole(ex_screw))+4, y_rod_height+support_wall_thickness*2+xy_smooth_rod_diameter/2+2, 0]) rotate(a=[0,0,0]) y_rod_mount();
 	}

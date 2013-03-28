@@ -22,16 +22,18 @@ module corner_bracket(length=2) {
 	}
 }
 
-module top_brace_bracket() {
+module top_brace_bracket(angle=45) {
+	
 	difference() {
 		union () {
-			translate([0, 0, 0]) cube([extrusion[0]+support_wall_thickness, extrusion[0]*2, support_wall_thickness]);
+			translate([0, 0, 0]) cube_fillet([extrusion[0]+1, extrusion[0]*2, support_wall_thickness], vertical = [ 0, 0, 0, extrusion[0]], $fn=round(angle/15));
 			translate([-extrusion[0], 0, 0]) cube_fillet([extrusion[0], extrusion[0]*2, support_wall_thickness], vertical = [ 0, extrusion[0]/2, extrusion[0]/2, 0]);
-			translate([support_wall_thickness, extrusion[0]*2-extrusion[0]/sin(45), 0]) rotate(a=[0,0,-45]) cube_fillet([extrusion[0]*2, extrusion[0], support_wall_thickness], vertical = [extrusion[0]/2, 0, 0, extrusion[0]/2]);
+			translate([1, extrusion[0]*2-extrusion[0]*cos(angle), 0]) rotate(a=[0,0,-angle]) cube_fillet([extrusion[0]*2, extrusion[0], support_wall_thickness], vertical = [extrusion[0]/2, 0, 0, extrusion[0]/2]);
 		}
-		translate([support_wall_thickness, 0, 0]) {
-			translate([extrusion[0], extrusion[0]*2, support_wall_thickness/2]) rotate(a=[90,0,0]) chamfer(x=extrusion[0],z=extrusion[0]);
-			translate([0, extrusion[0]*2-extrusion[0]/sin(45), 0]) rotate(a=[0,0,-45]) {
+		translate([1, 0, 0]) {
+			//translate([extrusion[0], extrusion[0]*2, support_wall_thickness/2]) rotate(a=[90,0,0]) chamfer(x=extrusion[0],z=extrusion[0]);
+			translate([0, extrusion[0]*2-extrusion[0]*cos(angle), -0.01]) rotate(a=[0,0,-angle]) translate([-extrusion[0]*2, extrusion[0], 0]) cube([extrusion[0]*4, extrusion[0], support_wall_thickness+0.02]);
+			translate([0, extrusion[0]*2-extrusion[0]*cos(angle), 0]) rotate(a=[0,0,-angle]) {
 				translate([ extrusion[0]/2, extrusion[0]/2, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1);
 				translate([ extrusion[0]+extrusion[0]/2, extrusion[0]/2, 0]) screw_hole(type=ex_screw, h=support_wall_thickness+1);
 			}
@@ -48,4 +50,5 @@ module print_corner_bracket(length=2) {
 }
 
 translate([0,-extrusion[0]/2-4, 0]) print_corner_bracket(length=2);
-translate([-4,extrusion[0], 0]) rotate(a=[0,0,90]) top_brace_bracket();
+translate([-4,extrusion[0], 0]) rotate(a=[0,0,90]) top_brace_bracket(30);
+translate([extrusion[0]*2+4,extrusion[0], 0]) rotate(a=[0,0,90]) top_brace_bracket(60);

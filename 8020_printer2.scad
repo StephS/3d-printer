@@ -45,12 +45,13 @@ translate([0,0, extrusion[0]*2]) {
 			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=5/2,h=z_smooth_rod_length, center = true);
 		
 			// Braces
-			translate(v = [0, extrusion[0]/2,brace_pos-extrusion[0]/2]) rotate(a=[90,0,90]) top_brace_bracket();
-			translate(v = [0,brace_pos, 0]) mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket();
+			translate(v = [0, extrusion[0]/2,((brace_pos+brace_offset-1-extrusion[0]/2)/cos(60))*cos(30)-(extrusion[0]*2-extrusion[0]*cos(60))]) rotate(a=[90,0,90]) top_brace_bracket(60);
 			
-			translate(v = [0,(brace_pos+brace_offset), support_wall_thickness])
-			rotate(a=[45,0,0])
-			translate([-extrusion[0]/2, extrusion[0]/2, (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45)/2]) extrusion(length= (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45));
+			translate(v = [0,brace_pos, 0]) mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket(30);
+			
+			translate(v = [-extrusion[0]/2,(brace_pos+brace_offset), 1])
+
+			rotate(a=[30,0,0]) translate([0, extrusion[0]/2, (brace_pos+brace_offset-1-extrusion[0]/2)/cos(60)/2]) extrusion(length= (brace_pos+brace_offset-1-extrusion[0]/2)/cos(60));
 		}
 	
 		//top z bar
@@ -91,12 +92,13 @@ translate([0,0, extrusion[0]*2]) {
 			translate([(stepper_motor_padded/2), -support_wall_thickness-stepper_motor_padded/2-extrusion[0]/2, z_smooth_rod_length/2]) color("DimGray") cylinder(r=5/2,h=z_smooth_rod_length, center = true);
 		
 			// Braces
-			translate(v = [0, extrusion[0]/2,brace_pos-extrusion[0]/2]) rotate(a=[90,0,90]) top_brace_bracket();
-			translate(v = [0,brace_pos, 0]) mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket();
+			translate(v = [0, extrusion[0]/2,((brace_pos+brace_offset-1-extrusion[0]/2)/cos(60))*cos(30)-(extrusion[0]*2-extrusion[0]*cos(60))]) rotate(a=[90,0,90]) top_brace_bracket(60);
 			
-			translate(v = [0,(brace_pos+brace_offset), support_wall_thickness])
-			rotate(a=[45,0,0])
-			translate([-extrusion[0]/2, extrusion[0]/2, (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45)/2]) extrusion(length= (brace_pos+brace_offset-support_wall_thickness-extrusion[0]/2)/sin(45));
+			translate(v = [0,brace_pos, 0]) mirror([0, 0, 1]) rotate(a=[0,90,0]) top_brace_bracket(30);
+			
+			translate(v = [-extrusion[0]/2,(brace_pos+brace_offset), 1])
+
+			rotate(a=[30,0,0]) translate([0, extrusion[0]/2, (brace_pos+brace_offset-1-extrusion[0]/2)/cos(60)/2]) extrusion(length= (brace_pos+brace_offset-1-extrusion[0]/2)/cos(60));
 		}
 
 	}
