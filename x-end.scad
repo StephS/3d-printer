@@ -125,10 +125,11 @@ module x_end_idler(){
 }
 
 module pushfit_rod(diameter, length){
-    cylinder(h = length, r=hole_fit( dia=diameter,$fn=30)/2, $fn=30);
-    translate([0, -diameter/4, length/2]) cube([diameter, diameter/2, length], center = true);
+    rod_allow=0.05;
+    rod_hole(d=diameter, h=length, allowance=rod_allow, $fn=0);
+    translate([0, -(hole_fit_poly(diameter)+rod_allow)/4, length/2]) cube([(hole_fit_poly(diameter)+rod_allow), (hole_fit_poly(diameter)+rod_allow)/2, length], center = true);
 
-    translate([0, -diameter/2-1.2, length/2]) cube([diameter, 1, length], center = true);
+    translate([0, -(hole_fit_poly(diameter)+rod_allow)/2-1.2, length/2]) cube([(hole_fit_poly(diameter)+rod_allow), 1, length], center = true);
 }
 
 /*

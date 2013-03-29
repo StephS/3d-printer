@@ -26,6 +26,7 @@ module chamfer(x=10,y=10,z=10) {
 // This will size an outer diameter to fit inside dia with $fn sides
 // use this to set the diameter before passing to polyhole
 function hole_fit( dia=0,$fn=0) = dia/cos(180/(($fn>0) ? $fn : 0.01));
+function hole_fit_poly( dia=0) = dia/cos(180/poly_sides(dia));
 
 // This determines the number of sides of a hole that is printable
 // I added +1 because nobody wants to print a triangle. (plus it looks nicer, havn't tested printability yet.)

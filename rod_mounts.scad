@@ -13,7 +13,7 @@ module y_rod_mount(height=y_rod_height) {
 			translate([0, -support_wall_thickness-height, 0]) cylinder(r=(y_smooth_rod_diameter/2+support_wall_thickness),h=extrusion[0], center = true);
 			translate([0, (-support_wall_thickness)/2, 0]) cube_fillet([y_rod_mount_distance_from_center*2,support_wall_thickness,extrusion[0]], center = true, vertical = [(support_wall_thickness-1)/2, (support_wall_thickness-1)/2, (support_wall_thickness-1)/2, (support_wall_thickness-1)/2], $fn=12);
 		}
-		translate([0, -support_wall_thickness-height, 0]) rod_hole(d=y_smooth_rod_diameter, h=extrusion[0]+1, allowance=0.05, center = true);
+		translate([0, -support_wall_thickness-height, 0]) rod_hole(d=y_smooth_rod_diameter, h=extrusion[0]+1, allowance=0.1, center = true);
 		translate([(screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))+y_smooth_rod_diameter+support_wall_thickness*2)/2, (-support_wall_thickness), 0]) rotate(a=[-90,0,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, $fn=8);
 		translate([-(screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))+y_smooth_rod_diameter+support_wall_thickness*2)/2, (-support_wall_thickness), 0]) rotate(a=[-90,0,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, $fn=8);
 	}
@@ -27,7 +27,7 @@ module z_rod_mount(height=stepper_motor_padded/2) {
 			translate([0, (-support_wall_thickness)/2, 0]) cube_fillet([z_rod_mount_distance_from_center*2,support_wall_thickness,extrusion[0]], center = true, vertical = [(support_wall_thickness-1)/2, (support_wall_thickness-1)/2, (support_wall_thickness-1)/2, (support_wall_thickness-1)/2], $fn=12);
 			translate([0, (-height)/2-support_wall_thickness, -extrusion[0]/2+support_wall_thickness/2]) cube([z_rod_mount_distance_from_center*2-support_wall_thickness,height,support_wall_thickness], center = true);
 		}
-		translate([0, -support_wall_thickness-height, 0]) rod_hole(d=z_smooth_rod_diameter, h=extrusion[0]+1, allowance=0.05, center = true);
+		translate([0, -support_wall_thickness-height, 0]) rod_hole(d=z_smooth_rod_diameter, h=extrusion[0]+1, allowance=0.1, center = true);
 		translate([(screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))+z_smooth_rod_diameter+support_wall_thickness*2)/2, (-support_wall_thickness), 0]) rotate(a=[-90,0,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, $fn=8);
 		translate([-(screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))+z_smooth_rod_diameter+support_wall_thickness*2)/2, (-support_wall_thickness), 0]) rotate(a=[-90,0,0]) screw_hole(type=ex_screw,h=support_wall_thickness+1, $fn=8);
 		
