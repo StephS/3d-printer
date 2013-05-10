@@ -110,12 +110,11 @@ module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer
 	}
 }
 
-module rod_hole(d=0, h=0, allowance=rod_hole_allowance, $fn=0, center=false){
+module rod_hole(d=0, h=0, allowance=rod_hole_allowance, length=0, $fn=0, center=false){
 	//makes a rod hole
 	n=(($fn>0) ? $fn : poly_sides(d));
 	dia= hole_fit(d, n) + allowance;
-	rotate([0,0, 180/n])
-	cylinder_poly(h=h, r=dia/2, $fn=n, center=center);
+	cylinder_slot(h=h, r=dia/2, length=length, $fn=$fn, center=center);
 }
 
 module nut(type=nut_M3, h=0){
