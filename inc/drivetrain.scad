@@ -1,6 +1,8 @@
 include <functions.scad>;
 include <nuts_screws.scad>;
 
+stepper_motor_width=42;
+
 module nema17(places=[1,1,1,1], size=15.5, h=10, holes=false, shadow=false, head_drop=5, slot_length=0, $fn=24, hole_support=false){
     for (i=[0:3]) {
         if (places[i] == 1) {

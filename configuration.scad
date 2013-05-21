@@ -13,14 +13,14 @@
 include <inc/functions.scad>;
 include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
+include <inc/conf_bearing.scad>;
 include <inc/conf_extrusion.scad>;
 include <inc/belts_pulleys.scad>;
 include <inc/nuts_screws.scad>;
+include <printer_conf.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
 
-layer_height = 0.3;
-width_over_thickness = 2.2;
 inch = 25.4;
 
 // Select your belt type ******************************************************
@@ -115,22 +115,7 @@ z_smooth_rod_diameter=bushing_z[0]*2;
 top_x_width = top_x_width_in * inch + z_smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
 
 // Select idler bearing size **************************************************
-// [outer_diameter, width, inner_diameter, uses_guide]
-// 608 [standard skate bearings] with bearing guide
-bearing_608 = [22, 7, 8, 1];
-//608 bearings with fender washers
-bearing_608_washers = [22, 10, 8, 0];
-// 624 [roughly same diameter as pulley, makes belt parallel so its prettier]
-bearing_624 = [16, 5, 4, 1];
-// two 624 - for use without bearing guides. My favourite [ax]
-bearing_624_double = [16, 10, 4, 0];
-// Size for 1/4" R4RS bearing
-bearing_R4RS = [15.875, 4.9784, 6.35, 0];
-// Size for 6mm 626RS bearing
-bearing_626RS = [19, 6, 6, 0];
-
 //y_idler_washer=washer_inch_1_4;
-
 x_idler_bearing = bearing_624_double;
 y_idler_bearing = bearing_624_double;
 

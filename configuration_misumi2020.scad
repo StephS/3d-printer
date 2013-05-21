@@ -13,14 +13,14 @@
 include <inc/functions.scad>;
 include <inc/metric.scad>;
 include <inc/conf_bushing.scad>;
+include <inc/conf_bearing.scad>;
 include <inc/conf_extrusion.scad>;
 include <inc/belts_pulleys.scad>;
 include <inc/nuts_screws.scad>;
+include <printer_conf.scad>;
 
 // Custom settings here, tailor to your supplies and print settings
 
-layer_height = 0.3;
-width_over_thickness = 2.2;
 inch = 25.4;
 
 // Select your belt type ******************************************************

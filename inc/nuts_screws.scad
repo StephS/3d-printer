@@ -3,9 +3,7 @@
 // http://creativecommons.org/licenses/by/3.0/
 // Stephanie Shaltes
 include <functions.scad>;
-
-// should pull this from configuration.
-layer_height = 0.3;
+include <../printer_conf.scad>
 
 // Allowances for tolerance
 screw_hole_allowance = 0.15;
@@ -28,7 +26,7 @@ function screw_head_top_dia(type)  = type[2] * type[4];
 function screw_head_height(type) = type[3] * type[4];
 // diameter = 0; head_dia_bottom = 1; head_dia_top = 2; head_height = 3
 // multiplier = 4 (this is set to 1 since it will already be converted. So you can still use screw_dia, etc.)
-function v_screw_hole(type, hole_allowance=screw_hole_allowance, head_allowance=screw_head_allowance, $fn) = [(hole_fit(screw_dia(type),$fn))+hole_allowance, (hole_fit(screw_head_bottom_dia(type), $fn))+head_allowance, (hole_fit(screw_head_top_dia(type), $fn))+head_allowance, screw_head_height(type), 1];
+function v_screw_hole(type, hole_allowance=screw_hole_allowance, head_allowance=screw_head_allowance, $fn) = [((hole_fit(screw_dia(type),$fn))+hole_allowance), (hole_fit(screw_head_bottom_dia(type), $fn))+head_allowance, (hole_fit(screw_head_top_dia(type), $fn))+head_allowance, screw_head_height(type), 1];
 
 //************* nut access functions *************
 function nut_dia(type)  = type[0] * type[3];
@@ -74,9 +72,10 @@ module screw(h=20, head_drop=0, type=screw_M3_socket_head, washer_type=0, poly=f
 	}
 }
 
-module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer_type=0, $fn=0, hole_support=false ){
+module screw_hole(h=20, length=0, head_drop=0, type=screw_M3_socket_head, washer_type=0, $fn=0, hole_support=false, allowance=screw_hole_allowance ){
     //makes screw with head
-    screw=v_screw_hole(type, head_allowance=((screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance), $fn=$fn);
+
+    screw=v_screw_hole(type, hole_allowance = allowance, head_allowance = ((screw_head_bottom_dia(type) < screw_head_top_dia(type)) ? screw_head_allowance_tight : screw_head_allowance), $fn=$fn);
     
     head_bottom_dia= (washer_type[0]>screw_head_bottom_dia(screw)) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_bottom_dia(screw);
     head_top_dia= (washer_type[0]>screw_head_top_dia(screw)) ? washer_outer_dia(v_washer_hole(washer_type, $fn=$fn)) : screw_head_top_dia(screw);
@@ -152,6 +151,45 @@ module washer_hole(type=washer_M3, $fn=0){
 // head_dia_top = 2
 // head_height = 3
 // multiplier = 4 (fractional values are multiplied by 25.4 to get metric, else is 1)
+
+// Fractional (inch) #2 (Generic)
+screw_inch_2 =    [0.086, 0, 0, 0, 25.4];
+// Fractional (inch) #3 (Generic)
+screw_inch_3 =    [0.099, 0, 0, 0, 25.4];
+// Fractional (inch) #4 (Generic)
+screw_inch_4 =    [0.112, 0, 0, 0, 25.4];
+// Fractional (inch) #5 (Generic)
+screw_inch_5 =    [0.125, 0, 0, 0, 25.4];
+// Fractional (inch) #6 (Generic)
+screw_inch_6 =    [0.138, 0, 0, 0, 25.4];
+// Fractional (inch) #8 (Generic)
+screw_inch_8 =    [0.164, 0, 0, 0, 25.4];
+// Fractional (inch) #10 (Generic)
+screw_inch_10 =   [0.190, 0, 0, 0, 25.4];
+// Fractional (inch) 1/4 (Generic)
+screw_inch_1_4 =  [0.250,  0, 0, 0, 25.4];
+// Fractional (inch) 5/16 (Generic)
+screw_inch_5_16 = [0.3125, 0, 0, 0, 25.4];
+// Fractional (inch) 3/8 (Generic)
+screw_inch_3_8 =  [0.375,  0, 0, 0, 25.4];
+// Fractional (inch) 1/2 (Generic)
+screw_inch_1_2 =  [0.500,  0, 0, 0, 25.4];
+
+// Metric M3 (Generic)
+screw_M2p5 = [2.5, 0, 0, 0, 1];
+// Metric M3 (Generic)
+screw_M3 =   [  3, 0, 0, 0, 1];
+// Metric M4 (Generic)
+screw_M4 =   [  4, 0, 0, 0, 1];
+// Metric M5 (Generic)
+screw_M5 =   [  5, 0, 0, 0, 1];
+// Metric M6 (Generic)
+screw_M6 =   [  6, 0, 0, 0, 1];
+// Metric M8 (Generic)
+screw_M8 =   [  8, 0, 0, 0, 1];
+// Metric M10 (Generic)
+screw_M10 =  [ 10, 0, 0, 0, 1];
+
 
 //************* 8020inc Fractional (inch) screws *************
 // http://www.3dcontentcentral.com/parts/supplier/80%2020-Inc/9/14/620.aspx
