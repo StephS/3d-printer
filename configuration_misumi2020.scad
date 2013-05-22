@@ -41,13 +41,14 @@ belt_width = 7;
 pulley = conf_pulley_36_GT2;
 
 // the motor has a cylinder on it that raises the base of the shaft 2mm, this value must be greater than 2mm
-pulley_height_from_motor=4;
+pulley_height_from_motor=3;
 
 // Stepper motor dimensions
 stepper_motor_height=42;
 stepper_motor_width=42;
 stepper_motor_padded=stepper_motor_width+2;
 
+// distance between the center of the Z Lead screw and the center of the Z smooth rod. Default for Prusa i3 is 17
 z_screw_rod_separation=17;
 
 // Screws used to mount to the extrusion
@@ -60,11 +61,6 @@ motor_mount_thickness=10;
 // screw used for the Y idler bearing. make sure it matches the ID of the bearing.
 y_bearing_screw = screw_M4_button_head;
 y_bearing_nut = nut_M4;
-
-// Y carriage settings
-y_carriage_screw = screw_M4_button_head;
-y_carriage_hole_spacing = 29;
-y_bushing_mount_height=(support_wall_thickness+2);
 
 // screw used to mount parts to the extrusion
 ex_screw=screw_M5_button_head;
@@ -103,6 +99,17 @@ z_smooth_rod_length=(z_height+extrusion[0]);
 bushing_x = conf_b_lm8uu;
 bushing_y = conf_b_lm8uu;
 bushing_z = conf_b_lm8uu;
+
+bushing_retainer_add=(9*layer_height);
+bushing_clamp_outer_radius_add1=((4*single_wall_width) < 2) ? floor(2/single_wall_width)*single_wall_width : (4*single_wall_width);
+bushing_clamp_outer_radius_add=((4*single_wall_width) > 2.7) ? floor(2.6/single_wall_width)*single_wall_width : bushing_clamp_outer_radius_add1;
+
+// Y carriage settings
+y_carriage_screw = screw_M4_button_head;
+y_carriage_hole_spacing = 29;
+y_bushing_mount_thickness=(support_wall_thickness+2);
+y_bushing_foot_height=bushing_y[2]+bushing_retainer_add;
+
 // for longer bearings use one shorter in x-carriage to make place for belt attachment
 // by default use same as xy
 bushing_x_carriage = bushing_x;
@@ -114,22 +121,7 @@ z_smooth_rod_diameter=bushing_z[0]*2;
 top_x_width = top_x_width_in * inch + z_smooth_rod_diameter + support_wall_thickness*2+stepper_motor_padded+z_screw_rod_separation*2+screw_head_top_dia(v_screw_hole(ex_screw, $fn=8))*2;
 
 // Select idler bearing size **************************************************
-// [outer_diameter, width, inner_diameter, uses_guide]
-// 608 [standard skate bearings] with bearing guide
-bearing_608 = [22, 7, 8, 1];
-//608 bearings with fender washers
-bearing_608_washers = [22, 10, 8, 0];
-// 624 [roughly same diameter as pulley, makes belt parallel so its prettier]
-bearing_624 = [16, 5, 4, 1];
-// two 624 - for use without bearing guides. My favourite [ax]
-bearing_624_double = [16, 10, 4, 0];
-// Size for 1/4" R4RS bearing
-bearing_R4RS = [15.875, 4.9784, 6.35, 0];
-// Size for 6mm 626RS bearing
-bearing_626RS = [19, 6, 6, 0];
-
 //y_idler_washer=washer_inch_1_4;
-
 x_idler_bearing = bearing_624_double;
 y_idler_bearing = bearing_624_double;
 
@@ -149,12 +141,12 @@ y_rod_separation=140;
 y_clamp_separation=100;
 
 // this is where the bottom of the Y rod will be.
-y_rod_height=support_wall_thickness+7;
+y_rod_height=support_wall_thickness+9;
 
 // LM8UU dimensions
 // LM8UU_length = conf_b[2];
 // The thickness of the mount for the LM8UU is 2mm ( using lm8uu-holder-slim_v1-1 )
-y_bushing_height = bushing_y[1]+y_bushing_mount_height;
+y_bushing_height = bushing_y[1]+y_bushing_mount_thickness;
 y_belt_center=(y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[8] + pulley_height_from_motor);
 
 // this setting is for the Prusa i2 bed
@@ -195,7 +187,7 @@ echo("For X axis top extrusion mount, drill top X axis extrusion at ", ((top_x_w
 
 //Check to be sure the pulley doesn't hit the Y bed
 if ((y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[0] + pulley_height_from_motor) < 2) echo ("Warning! Bed is too close to the pulley. Please change y_rod_height.");
-echo("Distance between bed and Y pulley:", (y_rod_height+y_smooth_rod_diameter/2+y_bushing_height)-(pulley[0] + pulley_height_from_motor));
+echo("Distance between bed and Y pulley:", (y_rod_height+y_smooth_rod_diameter/2+y_bushing_mount_thickness)-(pulley[0] + pulley_height_from_motor));
 
 // These constants define the geometry of the complete-printer.scad
 

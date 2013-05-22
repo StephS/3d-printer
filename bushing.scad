@@ -11,9 +11,9 @@ include <configuration.scad>
 function adjust_bushing_len(conf_b, h, add=layer_height*2) = ((conf_b[2]+add) > h) ? conf_b[2]+add : h;
 
 //distance from the flat side of bushing holder to rod center
-function bushing_foot_len(conf_b, h=10.5, add=4*single_wall_width) = ((conf_b[1]+add) > h) ? conf_b[1]+add : h;
+function bushing_foot_len(conf_b, h=10.5, add=bushing_clamp_outer_radius_add) = ((conf_b[1]+add) > h) ? conf_b[1]+add : h;
 
-function bushing_outer_radius(conf_b) = conf_b[1] + 4*single_wall_width;
+function bushing_clamp_outer_radius(conf_b) = conf_b[1] + bushing_clamp_outer_radius_add;
 
 // basic building blocks, housings for 1 bushing/bearing
 // at [0,0] there is center of the smooth rod, pointing in Z
@@ -26,14 +26,14 @@ module linear_bushing_negative_single(conf_b=bushing_y, h=0){
 
 module linear_bearing_negative_single(conf_b=bushing_y, h=0){
     // as above but moved by 3 layers up
-    translate([0, 0, -0.01+3*layer_height])  cylinder(r = conf_b[1], h = adjust_bushing_len(conf_b, h) + 0.02);
+    cylinder_poly(r = conf_b[1], h = adjust_bushing_len(conf_b, h) + 0.02,center=true);
 }
 
 module linear_bushing_single(conf_b=bushing_y, h=0) {
     // This is the printed barrel around bushing
     // with foot pointing to -x
     translate([-bushing_foot_len(conf_b), -7, 0]) cube([bushing_foot_len(conf_b), 14, adjust_bushing_len(conf_b, h)]);
-    cylinder(r=bushing_outer_radius(conf_b), h=adjust_bushing_len(conf_b, h));
+    cylinder_poly(r=bushing_clamp_outer_radius(conf_b), h=adjust_bushing_len(conf_b, h));
 }
 
 module linear_bushing_negative(conf_b=bushing_y, h=0){
@@ -44,12 +44,16 @@ module linear_bushing_negative(conf_b=bushing_y, h=0){
 
 module linear_bearing_negative(conf_b = bushing_y, h = 0){
     //same as linear_bushing_negative, but with z direction constrained parts
-    translate([0,0,-0.1]) cylinder(r = conf_b[0] + single_wall_width, h=adjust_bushing_len(conf_b, h, 8*layer_height)+0.2);
+    cylinder_poly(r = conf_b[0] + single_wall_width, h=adjust_bushing_len(conf_b, h, bushing_retainer_add)+0.2,center=true);
+    
     //lower bearing
+    translate([0,0,- (h-bushing_retainer_add-conf_b[2])/2]) 
     linear_bearing_negative_single(conf_b);
-    if (h > 2*conf_b[2] + 9*layer_height){
-        translate([0,0,h]) mirror([0,0,1]) linear_bearing_negative_single(conf_b);
+    
+    if (h > 2*conf_b[2] + bushing_retainer_add){
+        translate([0,0,(h-bushing_retainer_add-conf_b[2])/2]) mirror([0,0,1]) linear_bearing_negative_single(conf_b);
     }
+	
 }
 
 module linear_negative_preclean(conf_b = bushing_y) {
@@ -84,106 +88,100 @@ module linear_bushing(conf_b=bushing_y, h=0){
 }
 
 module linear_bearing(conf_b=bushing_y, h=0){
-    difference() {
-        union() {
-            difference(){
-                union(){
-                    //main block
-                    //translate([-bushing_foot_len(conf_b), -7, 0]) cube([4, 14, adjust_bushing_len(conf_b, h, 9*layer_height)]);   <- removed for duplicity:)
-                    translate([0,0,0]) cylinder(h = adjust_bushing_len(conf_b, h, 9*layer_height), r=bushing_outer_radius(conf_b), $fn=60);
-                }
-                //smooth entry cut
-                translate([12,0,-1]) rotate([0,0,45]) cube([20, 20, 200], center=true);
-            }
-            intersection(){
-                translate([0, -(bushing_outer_radius(conf_b)), 0]) cube([100, 2*bushing_outer_radius(conf_b) , 200]);
-                union() {
-                    // upper clamp for long holders
-                    if (h > 2*conf_b[2] + 9*layer_height || conf_b[2] > 45){
-                        //translate ([0,0, max(h, conf_b[2]) - 8 ]) bearing_clamp(conf_b, 2*(bushing_outer_radius(conf_b)));
-                        translate ([0,0, h-(conf_b[2]+9*layer_height)]) bearing_clamp2(conf_b, w1=2*bushing_outer_radius(conf_b), w2=2*bushing_outer_radius(conf_b)-4*single_wall_width, h=conf_b[2]+9*layer_height);
-                        translate ([0,0, (conf_b[2]+9*layer_height)]) bearing_clamp_brick2(conf_b, w1=2*bushing_outer_radius(conf_b), w2=2*bushing_outer_radius(conf_b)-4*single_wall_width, h=h-((conf_b[2]+9*layer_height)*2));
-                    }
-                    //lower clamp
-						bearing_clamp2(conf_b, w1=2*bushing_outer_radius(conf_b), w2=2*bushing_outer_radius(conf_b)-4*single_wall_width, h=conf_b[2]+9*layer_height);
-                    //translate ([0, 0, 10]) bearing_clamp(conf_b, 2*(bushing_outer_radius(conf_b)));
-                }
-            }
-        }
-        //main axis
-        translate([0,0,-2]) cylinder(h = adjust_bushing_len(conf_b, h)+10, r=conf_b[1]);
-        //main cut
-        translate([0, -conf_b[1]+1, -1]) cube([30, 2*conf_b[1]-2, 200]);
-    }
-    difference() {
-        translate([-bushing_foot_len(conf_b), -7, 0]) cube([4, 14, adjust_bushing_len(conf_b, h, 9*layer_height)]);
-        linear_negative(conf_b, h);
-    }
+	clamp_length=adjust_bushing_len(conf_b, h, bushing_retainer_add);
+	difference() {
+	    union() {
+		    difference() {
+				union(){
+			        //main block
+		            //translate([-bushing_foot_len(conf_b), -7, 0]) cube([4, 14, adjust_bushing_len(conf_b, h, 9*layer_height)]);   <- removed for duplicity:)
+		            cylinder_poly(h = clamp_length, r=bushing_clamp_outer_radius(conf_b), center=true);
+		        
+		        	difference() {
+		        	    union() {
+		        		    translate([0,0,-h/2]) bearing_clamp_bevel(conf_b,w1=2*bushing_clamp_outer_radius(conf_b), w2=2*conf_b[1]+bushing_clamp_outer_radius_add, h=clamp_length);
+		        		    translate([0,0, -(h-bushing_retainer_add-conf_b[2])/2]) bearing_clamp_screw_trap(conf_b,w1=2*bushing_clamp_outer_radius(conf_b), w2=2*conf_b[1]+bushing_clamp_outer_radius_add);
+		        		    if (h > 2*conf_b[2] + bushing_retainer_add || conf_b[2] > 45) translate([0,0, (h-bushing_retainer_add-conf_b[2])/2]) bearing_clamp_screw_trap(conf_b,w1=2*bushing_clamp_outer_radius(conf_b), w2=2*conf_b[1]+bushing_clamp_outer_radius_add);
+						}
+						translate([0,0, -(h-bushing_retainer_add-conf_b[2])/2]) bearing_clamp_screw_negative(conf_b,w1=2*bushing_clamp_outer_radius(conf_b), w2=2*conf_b[1]+bushing_clamp_outer_radius_add);
+						if (h > 2*conf_b[2] + bushing_retainer_add || conf_b[2] > 45) translate([0,0, (h-bushing_retainer_add-conf_b[2])/2]) bearing_clamp_screw_negative(conf_b,w1=2*bushing_clamp_outer_radius(conf_b), w2=2*conf_b[1]+bushing_clamp_outer_radius_add);
+		        	    translate ([-(bushing_clamp_outer_radius(conf_b)/2), 0, 0]) cube([bushing_clamp_outer_radius(conf_b), bushing_clamp_outer_radius(conf_b)*2 , h+1],center=true);
+					}
+		        }
+		        //main axis
+		        translate([0,0,-2]) cylinder_poly(h = clamp_length+10, r=conf_b[1],center=true);
+		        //main cut
+		        translate([0, -conf_b[1]+1, -(clamp_length+1)/2]) cube([30, 2*conf_b[1]-2, clamp_length+1]);
+		    }
+		    difference() {
+		        translate([-bushing_foot_len(conf_b), -7, -clamp_length/2]) cube([4, 14, clamp_length]);
+		        linear_negative(conf_b, clamp_length);
+		    }
+		}
+		translate([-bushing_foot_len(conf_b)-3.5, -conf_b[1], -(clamp_length+1)/2]) cube([4, conf_b[1]*2, clamp_length+1]);
+	}
 }
 
 // this should be more parametric
-module firm_foot(conf_b, hole_spacing=29, foot_thickness=y_bushing_mount_height, h=bushing_y[2]+9*layer_height){
+module firm_foot(conf_b, hole_spacing=y_carriage_hole_spacing, foot_thickness=y_bushing_mount_thickness, h=y_bushing_foot_height, mounting_screw=y_carriage_screw){
     difference(){
         union() {
-            translate([foot_thickness/2,0,0]) cube_fillet([foot_thickness, hole_spacing+12, h], top=[13, 0, 13, 0], center=true);
+            translate([foot_thickness/2,0,0]) cube_fillet([foot_thickness, hole_spacing+12, h], center=true, top=[(hole_spacing+12-conf_b[2])/2+bushing_clamp_outer_radius_add,0,(hole_spacing+12-conf_b[2])/2+bushing_clamp_outer_radius_add,0], vertical=[floor(foot_thickness/2-0.5),floor(foot_thickness/2-0.5),floor(foot_thickness/2-0.5),floor(foot_thickness/2-0.5)]);
         }
-        translate([foot_thickness, hole_spacing/2, 0]) rotate([0, -90, 0]) screw_hole(type=y_carriage_screw, head_drop=0, $fn=8);
-        translate([foot_thickness,-hole_spacing/2, 0]) rotate([0,-90,0]) screw_hole(type=y_carriage_screw, head_drop=0, $fn=8);
+        
+        translate([foot_thickness, hole_spacing/2, 0]) rotate([0, -90, 0]) screw_hole(type=mounting_screw, head_drop=0, $fn=8);
+        translate([foot_thickness,-hole_spacing/2, 0]) rotate([0,-90,0]) screw_hole(type=mounting_screw, head_drop=0, $fn=8);
+        //translate([foot_thickness, hole_spacing/2, -h/2+6]) rotate([0, -90, 0]) screw_hole(type=bushing_mounting_screw, head_drop=0, $fn=8);
+        //translate([foot_thickness,-hole_spacing/2, -h/2+6]) rotate([0,-90,0]) screw_hole(type=bushing_mounting_screw, head_drop=0, $fn=8);
     }
 }
 
-module y_bearing(conf_b=bushing_y, height=y_bushing_mount_height, hole_spacing=y_carriage_hole_spacing){
-
-    difference() {
+module linear_bearing_clamp_with_foot(conf_b=bushing_y, foot_thickness=y_bushing_mount_thickness, foot_height=y_bushing_foot_height, hole_spacing=y_carriage_hole_spacing, center=false){
+	translate ([0,0,(center) ? 0 : foot_height/2])
         union() {
             difference() {
                 union() {
-                    translate([-conf_b[1]-height, 0, (conf_b[2]+9*layer_height)/2]) firm_foot(conf_b, foot_thickness=height, hole_spacing=hole_spacing);
+                    translate([-13+0.05, 0, 0]) firm_foot(conf_b, foot_thickness=foot_thickness, hole_spacing=hole_spacing, h=foot_height);
+                    
                     if (conf_b[2] > 45) {
-                        translate([-bushing_foot_len(conf_b), 0, adjust_bushing_len(conf_b, 45) - 8]) mirror([0, 0, 1]) firm_foot();
+                        translate([-bushing_foot_len(conf_b), 0, adjust_bushing_len(conf_b, 45) - 8]) mirror([0, 0, 1]) firm_foot(conf_b);
                     }
                 }
                 linear_negative_preclean();
             }
-            linear();
+            linear(center=true);
         }
-        //linear_negative(bushing_y, 20);
-    }
 }
 
-module bearing_clamp_brick2(conf_b=bushing_y, w1=0, w2=0, h=bushing_y[2]+9*layer_height){
-	translate ([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3)))/2.78+0.3,0,h/2])
+module bearing_clamp_bevel(conf_b=bushing_y, w1=0, w2=0, h=bushing_y[2]+bushing_retainer_add){
+	translate ([(conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3)))/2.75+0.3,0,h/2])
 	rotate([0,90,0])
 	trapezoid(cube=[h, w1, conf_b[1]+nut_outer_dia(v_nut_hole(nut_M3))/1.39+0.3], x1=0, x2=0, y1=(w1-w2)/2, y2=(w1-w2)/2, center=true);
 }
 
 // w1 is outside dimensions, w2 is beveled dimensions
-module bearing_clamp2(conf_b=bushing_y, w1=0, w2=0, h=bushing_y[2]+9*layer_height){
-	difference() {
-		union() {
-		bearing_clamp_brick2(conf_b,w1,w2,h);
-		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
+module bearing_clamp_screw_trap(conf_b=bushing_y, w1=0, w2=0){
+	union() {
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), 0])
 			rotate([90,0,0]) rotate([0,0,180/8]) cylinder(r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.2,$fn=8), r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
-		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), 0])
 			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r1=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.2,$fn=8), r2=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=(w1-w2)/2, $fn=8);
-		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, 0, h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, 0, 0])
 			rotate([90,0, 0]) rotate([0,0,180/8]) cylinder(r=hole_fit(nut_outer_dia(v_nut_hole(nut_M3))/2+0.5+(w1-w2)/2,$fn=8), h=w2, $fn=8, center=true);	
-		}
-		//translate([m3_diameter / 2 + conf_b[1] + 0.3, 0, h/2]) rotate([90,0,0]) cylinder(r=m3_diameter / 2, h=w1+2, center=true);
-		
+	}
+}
+
+module bearing_clamp_screw_negative(conf_b=bushing_y, w1=0, w2=0){
 		// nut trap
-		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, -(w2/2), 0])
 			rotate([90,0,0])
 				nut_hole(type=nut_M3);
 	
 		// screw head hole
-		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), h/2])
+		translate([screw_dia(v_screw_hole(screw_M3_socket_head,$fn=8)) / 2 + conf_b[1] + 0.3, (w1/2), 0])
 			rotate([90,0, 0])
 				screw_hole(type=screw_M3_socket_head, h=w1+2, head_drop=(w1-w2)/2, washer_type=washer_M3, $fn=8);
-
-	}
 }
-
 
 module linear_negative(conf_b = bushing_y, h = 0){
     //selects right negative based on type
@@ -194,17 +192,20 @@ module linear_negative(conf_b = bushing_y, h = 0){
     }
 }
 
-module linear(conf_b = bushing_y, h = 0){
+module linear(conf_b = bushing_y, h = bushing_y[2]+bushing_retainer_add, center=false){
     //selects right negative based on type
-    if (conf_b[3] == 0) {
-        linear_bearing(conf_b, h);
-    } else {
-        linear_bushing(conf_b, h);
-    }
-    %linear_negative(conf_b, h);
+    translate ([0,0,(center) ? 0 : h/2]) {
+	    if (conf_b[3] == 0) {
+	        linear_bearing(conf_b, h);
+	    } else {
+	        linear_bushing(conf_b, h);
+	    }
+	    %linear_negative(conf_b, h);
+	}
 }
 
-    y_bearing();
+//linear_bearing(conf_b=bushing, h=bushing_holder_height);
+
+translate([0,0,(bushing_y[2]+bushing_retainer_add)/2]) linear_bearing_clamp_with_foot();
     //translate([0,52,0]) bearing_clamp2(w1=30,w2=20 );
-    
-    //translate([0,52,0]) linear();
+    //linear(bushing_x, 86);

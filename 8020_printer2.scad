@@ -112,8 +112,8 @@ translate([0,0, extrusion[0]*2]) {
 		translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 		translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 		// Y axis Bed bearing clamps
-		translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
-		translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+		translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) linear_bearing_clamp_with_foot();
+		translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) linear_bearing_clamp_with_foot();
 		// y axis smooth rod
 		translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=y_smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
 	}
@@ -123,8 +123,8 @@ translate([0,0, extrusion[0]*2]) {
 			translate(v = [0, y_length/2 + extrusion[0]/2, 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 			translate(v = [0, -(y_length/2 + extrusion[0]/2), 0]) rotate(a=[-90,0,0]) y_rod_mount(height=y_rod_height);
 			// Y axis Bed bearing clamps
-			translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
-			translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) y_bearing();
+			translate(v = [0, y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) linear_bearing_clamp_with_foot();
+			translate(v = [0, -y_clamp_separation/2, 5+y_rod_height]) rotate([0,90,90]) linear_bearing_clamp_with_foot();
 			// y axis smooth rod
 			translate(v = [0, 0, 5+y_rod_height]) rotate(a=[90,0,0]) color("DimGray") cylinder(r=y_smooth_rod_diameter/2,h=y_smooth_rod_length, center = true);
 		}
